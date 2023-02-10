@@ -1,26 +1,25 @@
 /**
- * @file elevate_states.h
+ * @file elevate_types.h
  * 
- * @brief states for ELEVATE modules and systems
+ * @brief types for ELEVATE modules and systems
  * 
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
- * 
  */
-#ifndef ELEVATE_STATES_H_
-#define ELEVATE_STATES_H_
+#ifndef ELEVATE_TYPES_H_
+#define ELEVATE_TYPES_H_
 
 /**
  * Elevate Status
  * 
  * OK:            no limitations
- * LOWER_LIMITED: minimum height reached
  * UPPER_LIMITED: maximum height reached
+ * LOWER_LIMITED: minimum height reached
  */
 enum ElevateStatus {
   OK,
-  LOWER_LIMITED,
-  UPPER_LIMITED
+  UPPER_LIMITED,
+  LOWER_LIMITED
 };
 
 /**

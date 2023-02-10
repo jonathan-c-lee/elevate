@@ -1,21 +1,21 @@
 /**
- * @file button_utility.h
+ * @file switch_utility.h
  * 
- * @brief header file for utility functions for general buttons
+ * @brief header file for utility functions for general switches
  * 
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
  */
-#ifndef BUTTON_UTILITY_H_
-#define BUTTON_UTILITY_H_
+#ifndef SWITCH_UTILITY_H_
+#define SWITCH_UTILITY_H_
 
 #include <arduino.h>
 
 unsigned long const DEBOUNCE_DELAY_MS = 25;
 
-bool button_pressed(
-    uint8_t button_pin,
-    uint8_t& button_state,
+bool switch_pressed(
+    uint8_t switch_pin,
+    uint8_t& switch_state,
     uint8_t& previous_state,
     unsigned long& previous_time
 );

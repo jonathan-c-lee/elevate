@@ -6,9 +6,10 @@
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
  */
-#include "elevate_states.h"
-#include "button_utility.h"
+#include "elevate_types.h"
+#include "switch_utility.h"
 #include "elevate_module.h"
+#include "button_panel.h"
 #include "elevate_system.h"
 
 #define UP_PWM_PIN_0             0
@@ -43,42 +44,10 @@
 #define UP_PWM_CHANNEL_3         0
 #define DOWN_PWM_CHANNEL_3       0
 
-#define UP_BUTTON_PIN   0
-#define DOWN_BUTTON_PIN 0
-
-portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
-hw_timer_t *button_panel_timer = NULL;
-int const timer_frequency_ms = 10;
+#define UP_SWITCH_PIN   0
+#define DOWN_SWITCH_PIN 0
 
 uint8_t const NUMBER_OF_MODULES = 4;
-
-bool up_button_pressed() {
-  static uint8_t button_state = digitalRead(UP_BUTTON_PIN);
-  static uint8_t previous_state = digitalRead(UP_BUTTON_PIN);
-  static unsigned long previous_time = millis();
-  return button_pressed(UP_BUTTON_PIN, button_state, previous_state, previous_time);
-}
-
-bool down_button_pressed() {
-  static uint8_t button_state = digitalRead(DOWN_BUTTON_PIN);
-  static uint8_t previous_state = digitalRead(DOWN_BUTTON_PIN);
-  static unsigned long previous_time = millis();
-  return button_pressed(DOWN_BUTTON_PIN, button_state, previous_state, previous_time);
-}
-
-void IRAM_ATTR update_system_state() {
-  portENTER_CRITICAL_ISR(&mux);
-  if (up_button_pressed() && down_button_pressed()) {
-    elevate.set_state(STOP);
-  } else if (up_button_pressed()) {
-    elevate.set_state(MOVE_UP);
-  } else if (down_button_pressed()) {
-    elevate.set_state(MOVE_DOWN);
-  } else {
-    elevate.set_state(STOP);
-  }
-  portEXIT_CRITICAL_ISR(&mux);
-}
 
 void setup() {
   // create elevate modules
@@ -120,21 +89,17 @@ void setup() {
     DOWN_PWM_CHANNEL_3
   );
 
+  // create button panel
+  ButtonPanel const button_panel = ButtonPanel(UP_SWITCH_PIN, DOWN_SWITCH_PIN);
+
   // create elevate system
-  ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES);
-
-  // button panel setup
-  pinMode(UP_BUTTON_PIN, INPUT_PULLUP);
-  pinMode(DOWN_BUTTON_PIN, INPUT_PULLUP);
-
-  // update system state on fixed interval
-  button_panel_timer = timerBegin(0, 80, true);
-  timerAttachInterrupt(button_panel_timer, &update_system_state, true);
-  timerAlarmWrite(button_panel_timer, 1000 * timer_frequency_ms, true);
-  timerAlarmEnable(button_panel_timer);
+  ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES, &button_panel);
 }
 
 void loop() {
+  elevate.update_module_status();
+  elevate.update_system_state();
+
   // elevate system moves based on state
   elevate.control();
 }
