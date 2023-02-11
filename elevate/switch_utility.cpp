@@ -9,6 +9,8 @@
 #include "switch_utility.h"
 #include <arduino.h>
 
+unsigned long const DEBOUNCE_DELAY_MS = 25;
+
 /**
  * Determine if a switch is pressed
  * 

@@ -14,6 +14,7 @@
 class ButtonPanel {
   public:
     ButtonPanel(uint8_t up_switch_pin, uint8_t down_switch_pin);
+    void setup() const;
     bool up_switch_pressed() const;
     bool down_switch_pressed() const;
 

@@ -9,7 +9,8 @@
 #ifndef ELEVATE_MODULE_H_
 #define ELEVATE_MODULE_H_
 
-#include "elevate_states.h"
+#include "elevate_utils.h"
+#include "pid_controller.h"
 #include <arduino.h>
 
 class ElevateModule {
@@ -23,13 +24,22 @@ class ElevateModule {
       uint8_t up_pwm_channel,
       uint8_t down_pwm_channel
     );
-    ElevateStatus get_status();
+    void setup() const;
+    ElevateState get_state() const;
+    ElevateStatus get_status() const;
+    void update_status();
+    void hard_stop();
+    void smooth_stop(long height);
+    void move(long height);
 
   private:
-    static portMUX_TYPE const MUX;
     static uint32_t const MOTOR_FREQUENCY;
     static uint8_t const MOTOR_RESOLUTION_BITS;
+
     static float const KP, KI, KD;
+    static unsigned long const PID_RATE_MS;
+    static int const MINIMUM_OUTPUT, MAXIMUM_OUTPUT;
+    static long const ERROR_THRESHOLD;
 
     uint8_t const UP_PWM_PIN;
     uint8_t const DOWN_PWM_PIN;
@@ -39,9 +49,18 @@ class ElevateModule {
     uint8_t const UP_PWM_CHANNEL;
     uint8_t const DOWN_PWM_CHANNEL;
 
-    void pwm_setup(uint8_t channel, uint8_t pin);
-    bool is_upper_limited();
-    bool is_lower_limited();
+    ElevateState state;
+    ElevateStatus status;
+    PIDController pid_controller;
+    long height;
+    int previous_angle;
+
+    void pwm_setup(uint8_t channel, uint8_t pin) const;
+    bool upper_limit_switch_pressed() const;
+    bool lower_limit_switch_pressed() const;
+    int get_angle() const;
+    long get_height();
+    void set_speed(int speed);
 };
 
 #endif

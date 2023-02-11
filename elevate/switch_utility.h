@@ -11,8 +11,6 @@
 
 #include <arduino.h>
 
-unsigned long const DEBOUNCE_DELAY_MS = 25;
-
 bool switch_pressed(
     uint8_t switch_pin,
     uint8_t& switch_state,
