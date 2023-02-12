@@ -41,5 +41,5 @@ bool switch_pressed(
 
   previous_state = current_state;
 
-  return switch_state == HIGH;
+  return switch_state == LOW;
 }
