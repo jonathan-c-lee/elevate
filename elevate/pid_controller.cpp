@@ -57,6 +57,8 @@ void PIDController::set_mode(Mode mode) {
  * 
  * @param setpoint setpoint value
  * @param input    input value
+ * 
+ * @return output of PID controller
  */
 int PIDController::control(long setpoint, long input) {
   if (mode == OFF) return previous_output;
@@ -93,5 +95,5 @@ int PIDController::control(long setpoint, long input) {
  * Start PID controller when turned ON
  */
 void PIDController::start() {
-  integral_term = 0;
+  integral_term = 0.0;
 }

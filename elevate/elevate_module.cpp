@@ -9,7 +9,9 @@
 #include "elevate_module.h"
 #include "elevate_utils.h"
 #include "switch_utility.h"
+#include "encoder.h"
 #include "pid_controller.h"
+#include "i2c_multiplexer.h"
 #include <arduino.h>
 
 uint32_t const ElevateModule::MOTOR_FREQUENCY = 10000;
@@ -23,32 +25,35 @@ int const ElevateModule::MINIMUM_OUTPUT = (-1 << MOTOR_RESOLUTION_BITS) + 1;
 int const ElevateModule::MAXIMUM_OUTPUT = (1 << MOTOR_RESOLUTION_BITS) - 1;
 long const ElevateModule::ERROR_THRESHOLD = 10;
 
+uint8_t const ElevateModule::MULTIPLEXER_ADDRESS = 0x70;
+I2CMultiplexer const ElevateModule::MULTIPLEXER = I2CMultiplexer(MULTIPLEXER_ADDRESS);
+
 /**
  * Elevate Module constructor
  * 
  * @param up_pwm_pin             up pwm pin
+ * @param up_pwm_channel         up pwm channel
  * @param down_pwm_pin           down pwm pin
- * @param encoder_adc_pin        encoder adc input pin
+ * @param down_pwm_channel       down pwm channel
+ * @param encoder_port           encoder port on I2C multiplexer
  * @param upper_limit_switch_pin upper limit switch input pin
  * @param lower_limit_switch_pin lower limit switch input pin
- * @param up_pwm_channel         up pwm channel
- * @param down_pwm_channel       down pwm channel
  */
 ElevateModule::ElevateModule(
     uint8_t up_pwm_pin,
-    uint8_t down_pwm_pin,
-    uint8_t encoder_adc_pin,
-    uint8_t upper_limit_switch_pin,
-    uint8_t lower_limit_switch_pin,
     uint8_t up_pwm_channel,
-    uint8_t down_pwm_channel) :
+    uint8_t down_pwm_pin,
+    uint8_t down_pwm_channel,
+    uint8_t encoder_port,
+    uint8_t upper_limit_switch_pin,
+    uint8_t lower_limit_switch_pin) :
     UP_PWM_PIN(up_pwm_pin),
+    UP_PWM_CHANNEL(up_pwm_channel),
     DOWN_PWM_PIN(down_pwm_pin),
-    ENCODER_ADC_PIN(encoder_adc_pin),
+    DOWN_PWM_CHANNEL(down_pwm_channel),
+    ENCODER(encoder_port),
     UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
     LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin),
-    UP_PWM_CHANNEL(up_pwm_channel),
-    DOWN_PWM_CHANNEL(down_pwm_channel),
     pid_controller(KP, KI, KD, PID_RATE_MS, MINIMUM_OUTPUT, MAXIMUM_OUTPUT) {
   state = STOPPED;
   status = FINE;
@@ -64,11 +69,14 @@ void ElevateModule::setup() const {
   pwm_setup(DOWN_PWM_CHANNEL, DOWN_PWM_PIN);
   pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
-  adcAttachPin(ENCODER_ADC_PIN);
+  MULTIPLEXER.setup();
+  ENCODER.setup();
 }
 
 /**
  * Get module state
+ * 
+ * @return module state
  */
 ElevateState ElevateModule::get_state() const {
   return state;
@@ -76,11 +84,16 @@ ElevateState ElevateModule::get_state() const {
 
 /**
  * Get module status
+ * 
+ * @return module status
  */
 ElevateStatus ElevateModule::get_status() const {
   return status;
 }
 
+/**
+ * Update module status
+ */
 void ElevateModule::update_status() {
   if (upper_limit_switch_pressed()) {
     status = UPPER_LIMITED;
@@ -101,6 +114,8 @@ void ElevateModule::hard_stop() {
 
 /**
  * Command the module to smoothly stop
+ * 
+ * @param height height to stop at
  */
 void ElevateModule::smooth_stop(long height) {
   if (state == STOPPED) return;
@@ -115,6 +130,8 @@ void ElevateModule::smooth_stop(long height) {
 
 /**
  * Command the module to move
+ * 
+ * @param height height to move to
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
@@ -123,6 +140,9 @@ void ElevateModule::move(long height) {
 
 /**
  * Set up the pwm pins of the module
+ * 
+ * @param channel pwm channel
+ * @param pin     pwm pin
  */
 void ElevateModule::pwm_setup(uint8_t channel, uint8_t pin) const {
   ledcSetup(channel, MOTOR_FREQUENCY, MOTOR_RESOLUTION_BITS);
@@ -160,7 +180,8 @@ bool ElevateModule::lower_limit_switch_pressed() const {
  * @return angle of the lead screw
  */
 int ElevateModule::get_angle() const {
-  return analogRead(ENCODER_ADC_PIN);
+  MULTIPLEXER.select_device(ENCODER.get_port());
+  return ENCODER.get_raw_angle();
 }
 
 /**

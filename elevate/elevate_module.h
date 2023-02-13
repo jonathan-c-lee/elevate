@@ -10,19 +10,21 @@
 #define ELEVATE_MODULE_H_
 
 #include "elevate_utils.h"
+#include "encoder.h"
 #include "pid_controller.h"
+#include "i2c_multiplexer.h"
 #include <arduino.h>
 
 class ElevateModule {
   public:
     ElevateModule(
       uint8_t up_pwm_pin,
-      uint8_t down_pwm_pin,
-      uint8_t encoder_adc_pin,
-      uint8_t upper_limit_switch_pin,
-      uint8_t lower_limit_switch_pin,
       uint8_t up_pwm_channel,
-      uint8_t down_pwm_channel
+      uint8_t down_pwm_pin,
+      uint8_t down_pwm_channel,
+      uint8_t encoder_port,
+      uint8_t upper_limit_switch_pin,
+      uint8_t lower_limit_switch_pin
     );
     void setup() const;
     ElevateState get_state() const;
@@ -41,13 +43,17 @@ class ElevateModule {
     static int const MINIMUM_OUTPUT, MAXIMUM_OUTPUT;
     static long const ERROR_THRESHOLD;
 
+    static uint8_t const MULTIPLEXER_ADDRESS;
+    static I2CMultiplexer const MULTIPLEXER;
+
     uint8_t const UP_PWM_PIN;
     uint8_t const DOWN_PWM_PIN;
-    uint8_t const ENCODER_ADC_PIN;
     uint8_t const UPPER_LIMIT_SWITCH_PIN;
     uint8_t const LOWER_LIMIT_SWITCH_PIN;
     uint8_t const UP_PWM_CHANNEL;
     uint8_t const DOWN_PWM_CHANNEL;
+
+    Encoder const ENCODER;
 
     ElevateState state;
     ElevateStatus status;
