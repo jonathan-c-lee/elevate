@@ -10,40 +10,40 @@
 #include "button_panel.h"
 #include "elevate_system.h"
 
-#define UP_PWM_PIN_0             0
+#define UP_PWM_PIN_0             4
 #define UP_PWM_CHANNEL_0         0
-#define DOWN_PWM_PIN_0           0
-#define DOWN_PWM_CHANNEL_0       0
-#define ENCODER_PORT_0           0
-#define UPPER_LIMIT_SWITCH_PIN_0 0
-#define LOWER_LIMIT_SWITCH_PIN_0 0
+#define DOWN_PWM_PIN_0           5
+#define DOWN_PWM_CHANNEL_0       1
+#define ENCODER_PORT_0           5
+#define UPPER_LIMIT_SWITCH_PIN_0 42
+#define LOWER_LIMIT_SWITCH_PIN_0 41
 
-#define UP_PWM_PIN_1             0
-#define UP_PWM_CHANNEL_1         0
-#define DOWN_PWM_PIN_1           0
-#define DOWN_PWM_CHANNEL_1       0
-#define ENCODER_PORT_1           0
-#define UPPER_LIMIT_SWITCH_PIN_1 0
-#define LOWER_LIMIT_SWITCH_PIN_1 0
+#define UP_PWM_PIN_1             15
+#define UP_PWM_CHANNEL_1         2
+#define DOWN_PWM_PIN_1           16
+#define DOWN_PWM_CHANNEL_1       3
+#define ENCODER_PORT_1           4
+#define UPPER_LIMIT_SWITCH_PIN_1 39
+#define LOWER_LIMIT_SWITCH_PIN_1 38
 
-#define UP_PWM_PIN_2             0
-#define UP_PWM_CHANNEL_2         0
-#define DOWN_PWM_PIN_2           0
-#define DOWN_PWM_CHANNEL_2       0
-#define ENCODER_PORT_2           0
-#define UPPER_LIMIT_SWITCH_PIN_2 0
-#define LOWER_LIMIT_SWITCH_PIN_2 0
+#define UP_PWM_PIN_2             9
+#define UP_PWM_CHANNEL_2         4
+#define DOWN_PWM_PIN_2           10
+#define DOWN_PWM_CHANNEL_2       5
+#define ENCODER_PORT_2           3
+#define UPPER_LIMIT_SWITCH_PIN_2 36
+#define LOWER_LIMIT_SWITCH_PIN_2 35
 
-#define UP_PWM_PIN_3             0
-#define UP_PWM_CHANNEL_3         0
-#define DOWN_PWM_PIN_3           0
-#define DOWN_PWM_CHANNEL_3       0
-#define ENCODER_PORT_3           0
-#define UPPER_LIMIT_SWITCH_PIN_3 0
-#define LOWER_LIMIT_SWITCH_PIN_3 0
+#define UP_PWM_PIN_3             13
+#define UP_PWM_CHANNEL_3         6
+#define DOWN_PWM_PIN_3           14
+#define DOWN_PWM_CHANNEL_3       7
+#define ENCODER_PORT_3           2
+#define UPPER_LIMIT_SWITCH_PIN_3 34
+#define LOWER_LIMIT_SWITCH_PIN_3 33
 
-#define UP_SWITCH_PIN   0
-#define DOWN_SWITCH_PIN 0
+#define UP_SWITCH_PIN   8
+#define DOWN_SWITCH_PIN 3
 
 int const NUMBER_OF_MODULES = 4;
 

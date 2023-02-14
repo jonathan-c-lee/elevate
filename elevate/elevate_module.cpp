@@ -68,8 +68,8 @@ ElevateModule::ElevateModule(
 void ElevateModule::setup() const {
   pwm_setup(UP_PWM_CHANNEL, UP_PWM_PIN);
   pwm_setup(DOWN_PWM_CHANNEL, DOWN_PWM_PIN);
-  pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
-  pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
+  pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
   if (!multiplexer_initialized) {
     MULTIPLEXER.setup();
     multiplexer_initialized = true;

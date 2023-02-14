@@ -23,8 +23,8 @@ UP_SWITCH_PIN(up_switch_pin), DOWN_SWITCH_PIN(down_switch_pin) {}
  * Set up button panel
  */
 void ButtonPanel::setup() const {
-  pinMode(UP_SWITCH_PIN, INPUT_PULLUP);
-  pinMode(DOWN_SWITCH_PIN, INPUT_PULLUP);
+  pinMode(UP_SWITCH_PIN, INPUT);
+  pinMode(DOWN_SWITCH_PIN, INPUT);
 }
 
 /**
