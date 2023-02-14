@@ -27,6 +27,7 @@ long const ElevateModule::ERROR_THRESHOLD = 10;
 
 uint8_t const ElevateModule::MULTIPLEXER_ADDRESS = 0x70;
 I2CMultiplexer const ElevateModule::MULTIPLEXER = I2CMultiplexer(MULTIPLEXER_ADDRESS);
+bool ElevateModule::multiplexer_initialized = false;
 
 /**
  * Elevate Module constructor
@@ -69,8 +70,10 @@ void ElevateModule::setup() const {
   pwm_setup(DOWN_PWM_CHANNEL, DOWN_PWM_PIN);
   pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
   pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT_PULLUP);
-  MULTIPLEXER.setup();
-  ENCODER.setup();
+  if (!multiplexer_initialized) {
+    MULTIPLEXER.setup();
+    multiplexer_initialized = true;
+  }
 }
 
 /**

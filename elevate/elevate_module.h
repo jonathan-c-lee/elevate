@@ -45,6 +45,7 @@ class ElevateModule {
 
     static uint8_t const MULTIPLEXER_ADDRESS;
     static I2CMultiplexer const MULTIPLEXER;
+    static bool multiplexer_initialized;
 
     uint8_t const UP_PWM_PIN;
     uint8_t const DOWN_PWM_PIN;

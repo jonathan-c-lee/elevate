@@ -10,6 +10,9 @@
 #include <arduino.h>
 #include <Wire.h>
 
+int const SDA_PIN = 1;
+int const SCL_PIN = 2;
+
 /**
  * I2C Multiplexer constructor
  * 
@@ -21,6 +24,7 @@ I2CMultiplexer::I2CMultiplexer(uint8_t address) : ADDRESS(address) {}
  * Set up I2C multiplexer
  */
 void I2CMultiplexer::setup() const {
+  Wire.setPins(SDA_PIN, SCL_PIN);
   Wire.begin();
 }
 

@@ -22,13 +22,6 @@ uint8_t const Encoder::STATUS_ADDRESS = 0x0b;
 Encoder::Encoder(uint8_t port) : PORT(port) {}
 
 /**
- * Set up encoder
- */
-void Encoder::setup() const {
-  Wire.begin();
-}
-
-/**
  * Get I2C multiplexer port
  * 
  * @return I2C multiplexer port

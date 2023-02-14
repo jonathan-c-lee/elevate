@@ -29,7 +29,6 @@ enum MagnetStrength {
 class Encoder {
   public:
     Encoder(uint8_t port);
-    void setup() const;
     uint8_t get_port() const;
     int get_raw_angle() const;
     bool magnet_detected() const;
