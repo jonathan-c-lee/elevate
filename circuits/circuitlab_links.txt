@@ -1,6 +1,4 @@
-Full Circuit: https://www.circuitlab.com/circuit/663y6ck6a353/elevate-general-circuit/
+Main Circuit: https://www.circuitlab.com/circuit/663y6ck6a353/elevate-general-circuit/
 Module Circuit: https://www.circuitlab.com/circuit/pz353z9gn9y4/elevate-module/
 Button Panel Circuit: https://www.circuitlab.com/circuit/48nuf679w27b/elevate-button-panel/
-Physical Button Panel Circuit: https://www.circuitlab.com/circuit/jddz8acw8a74/physical-button-panel/
-Physical Module Circuit: https://www.circuitlab.com/circuit/gs3854248c5h/physical-leg-module/
-Physical Main Circuit: https://www.circuitlab.com/circuit/egy5fq8wgk5y/physical-main-circuit/
+Power Circuit: https://www.circuitlab.com/circuit/bj2g7atv4qzx/power-circuit/
