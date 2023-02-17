@@ -211,7 +211,7 @@ long ElevateModule::get_height() {
  * @param speed speed to set the module at
  */
 void ElevateModule::set_speed(int speed) {
-  if (speed = 0) {
+  if (speed == 0) {
     ledcWrite(UP_PWM_CHANNEL, 0);
     ledcWrite(DOWN_PWM_CHANNEL, 0);
     state = STOPPED;
