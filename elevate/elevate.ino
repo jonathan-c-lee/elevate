@@ -10,34 +10,30 @@
 #include "button_panel.h"
 #include "elevate_system.h"
 
-#define UP_PWM_PIN_0             4
-#define UP_PWM_CHANNEL_0         0
-#define DOWN_PWM_PIN_0           5
-#define DOWN_PWM_CHANNEL_0       1
+#define PWM_PIN_0                4
+#define PWM_CHANNEL_0            0
+#define DIRECTION_PIN_0          5
 #define ENCODER_PORT_0           5
 #define UPPER_LIMIT_SWITCH_PIN_0 42
 #define LOWER_LIMIT_SWITCH_PIN_0 41
 
-#define UP_PWM_PIN_1             15
-#define UP_PWM_CHANNEL_1         2
-#define DOWN_PWM_PIN_1           16
-#define DOWN_PWM_CHANNEL_1       3
+#define PWM_PIN_1                4
+#define PWM_CHANNEL_1            0
+#define DIRECTION_PIN_1          5
 #define ENCODER_PORT_1           4
 #define UPPER_LIMIT_SWITCH_PIN_1 39
 #define LOWER_LIMIT_SWITCH_PIN_1 38
 
-#define UP_PWM_PIN_2             9
-#define UP_PWM_CHANNEL_2         4
-#define DOWN_PWM_PIN_2           10
-#define DOWN_PWM_CHANNEL_2       5
+#define PWM_PIN_2                4
+#define PWM_CHANNEL_2            0
+#define DIRECTION_PIN_2          5
 #define ENCODER_PORT_2           3
 #define UPPER_LIMIT_SWITCH_PIN_2 36
 #define LOWER_LIMIT_SWITCH_PIN_2 35
 
-#define UP_PWM_PIN_3             13
-#define UP_PWM_CHANNEL_3         6
-#define DOWN_PWM_PIN_3           14
-#define DOWN_PWM_CHANNEL_3       7
+#define PWM_PIN_3                4
+#define PWM_CHANNEL_3            0
+#define DIRECTION_PIN_3          5
 #define ENCODER_PORT_3           2
 #define UPPER_LIMIT_SWITCH_PIN_3 34
 #define LOWER_LIMIT_SWITCH_PIN_3 33
@@ -48,37 +44,33 @@
 int const NUMBER_OF_MODULES = 4;
 
 ElevateModule module_0 = ElevateModule(
-  UP_PWM_PIN_0,
-  UP_PWM_CHANNEL_0,
-  DOWN_PWM_PIN_0,
-  DOWN_PWM_CHANNEL_0,
+  PWM_PIN_0,
+  PWM_CHANNEL_0,
+  DIRECTION_PIN_0,
   ENCODER_PORT_0,
   UPPER_LIMIT_SWITCH_PIN_0,
   LOWER_LIMIT_SWITCH_PIN_0
 );
 ElevateModule module_1 = ElevateModule(
-  UP_PWM_PIN_1,
-  UP_PWM_CHANNEL_1,
-  DOWN_PWM_PIN_1,
-  DOWN_PWM_CHANNEL_1,
+  PWM_PIN_1,
+  PWM_CHANNEL_1,
+  DIRECTION_PIN_1,
   ENCODER_PORT_1,
   UPPER_LIMIT_SWITCH_PIN_1,
   LOWER_LIMIT_SWITCH_PIN_1
 );
 ElevateModule module_2 = ElevateModule(
-  UP_PWM_PIN_2,
-  UP_PWM_CHANNEL_2,
-  DOWN_PWM_PIN_2,
-  DOWN_PWM_CHANNEL_2,
+  PWM_PIN_2,
+  PWM_CHANNEL_2,
+  DIRECTION_PIN_2,
   ENCODER_PORT_2,
   UPPER_LIMIT_SWITCH_PIN_2,
   LOWER_LIMIT_SWITCH_PIN_2
 );
 ElevateModule module_3 = ElevateModule(
-  UP_PWM_PIN_3,
-  UP_PWM_CHANNEL_3,
-  DOWN_PWM_PIN_3,
-  DOWN_PWM_CHANNEL_3,
+  PWM_PIN_3,
+  PWM_CHANNEL_3,
+  DIRECTION_PIN_3,
   ENCODER_PORT_3,
   UPPER_LIMIT_SWITCH_PIN_3,
   LOWER_LIMIT_SWITCH_PIN_3

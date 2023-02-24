@@ -18,10 +18,9 @@
 class ElevateModule {
   public:
     ElevateModule(
-      uint8_t up_pwm_pin,
-      uint8_t up_pwm_channel,
-      uint8_t down_pwm_pin,
-      uint8_t down_pwm_channel,
+      uint8_t pwm_pin,
+      uint8_t pwm_channel,
+      uint8_t direction_pin,
       uint8_t encoder_port,
       uint8_t upper_limit_switch_pin,
       uint8_t lower_limit_switch_pin
@@ -47,12 +46,11 @@ class ElevateModule {
     static I2CMultiplexer const MULTIPLEXER;
     static bool multiplexer_initialized;
 
-    uint8_t const UP_PWM_PIN;
-    uint8_t const DOWN_PWM_PIN;
+    uint8_t const PWM_PIN;
+    uint8_t const PWM_CHANNEL;
+    uint8_t const DIRECTION_PIN;
     uint8_t const UPPER_LIMIT_SWITCH_PIN;
     uint8_t const LOWER_LIMIT_SWITCH_PIN;
-    uint8_t const UP_PWM_CHANNEL;
-    uint8_t const DOWN_PWM_CHANNEL;
 
     Encoder const ENCODER;
 

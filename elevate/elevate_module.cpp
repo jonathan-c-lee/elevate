@@ -17,9 +17,9 @@
 uint32_t const ElevateModule::MOTOR_FREQUENCY = 10000;
 uint8_t const ElevateModule::MOTOR_RESOLUTION_BITS = 10;
 
-float const ElevateModule::KP = 1.0;
-float const ElevateModule::KI = 0.0;
-float const ElevateModule::KD = 1.0;
+float const ElevateModule::KP = 2.0;
+float const ElevateModule::KI = 0.2;
+float const ElevateModule::KD = 0.2;
 unsigned long const ElevateModule::PID_RATE_MS = 50;
 int const ElevateModule::MINIMUM_OUTPUT = (-1 << MOTOR_RESOLUTION_BITS) + 1;
 int const ElevateModule::MAXIMUM_OUTPUT = (1 << MOTOR_RESOLUTION_BITS) - 1;
@@ -32,26 +32,23 @@ bool ElevateModule::multiplexer_initialized = false;
 /**
  * Elevate Module constructor
  * 
- * @param up_pwm_pin             up pwm pin
- * @param up_pwm_channel         up pwm channel
- * @param down_pwm_pin           down pwm pin
- * @param down_pwm_channel       down pwm channel
+ * @param pwm_pin                pwm pin
+ * @param pwm_channel            pwm channel
+ * @param direction_pin          direction pin
  * @param encoder_port           encoder port on I2C multiplexer
  * @param upper_limit_switch_pin upper limit switch input pin
  * @param lower_limit_switch_pin lower limit switch input pin
  */
 ElevateModule::ElevateModule(
-    uint8_t up_pwm_pin,
-    uint8_t up_pwm_channel,
-    uint8_t down_pwm_pin,
-    uint8_t down_pwm_channel,
+    uint8_t pwm_pin,
+    uint8_t pwm_channel,
+    uint8_t direction_pin,
     uint8_t encoder_port,
     uint8_t upper_limit_switch_pin,
     uint8_t lower_limit_switch_pin) :
-    UP_PWM_PIN(up_pwm_pin),
-    UP_PWM_CHANNEL(up_pwm_channel),
-    DOWN_PWM_PIN(down_pwm_pin),
-    DOWN_PWM_CHANNEL(down_pwm_channel),
+    PWM_PIN(pwm_pin),
+    PWM_CHANNEL(pwm_channel),
+    DIRECTION_PIN(direction_pin),
     ENCODER(encoder_port),
     UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
     LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin),
@@ -59,15 +56,15 @@ ElevateModule::ElevateModule(
   state = STOPPED;
   status = FINE;
   height = 0;
-  previous_angle = get_angle();
+  previous_angle = 0;
 }
 
 /**
  * Set up module
  */
 void ElevateModule::setup() const {
-  pwm_setup(UP_PWM_CHANNEL, UP_PWM_PIN);
-  pwm_setup(DOWN_PWM_CHANNEL, DOWN_PWM_PIN);
+  pwm_setup(PWM_CHANNEL, PWM_PIN);
+  pinMode(DIRECTION_PIN, OUTPUT);
   pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
   pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
   if (!multiplexer_initialized) {
@@ -212,16 +209,15 @@ long ElevateModule::get_height() {
  */
 void ElevateModule::set_speed(int speed) {
   if (speed == 0) {
-    ledcWrite(UP_PWM_CHANNEL, 0);
-    ledcWrite(DOWN_PWM_CHANNEL, 0);
+    ledcWrite(PWM_CHANNEL, 0);
     state = STOPPED;
   } else if (speed > 0) {
-    ledcWrite(UP_PWM_CHANNEL, speed);
-    ledcWrite(DOWN_PWM_CHANNEL, 0);
+    digitalWrite(DIRECTION_PIN, HIGH);
+    ledcWrite(PWM_CHANNEL, speed);
     state = MOVING_UP;
   } else {
-    ledcWrite(UP_PWM_CHANNEL, 0);
-    ledcWrite(DOWN_PWM_CHANNEL, -speed);
+    digitalWrite(DIRECTION_PIN, LOW);
+    ledcWrite(PWM_CHANNEL, -speed);
     state = MOVING_DOWN;
   }
 }
