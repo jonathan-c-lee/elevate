@@ -7,12 +7,13 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "encoder.h"
+#include "elevate_constants.h"
 #include <arduino.h>
 #include <Wire.h>
 
-uint8_t const Encoder::ENCODER_ADDRESS = 0x36;
-uint8_t const Encoder::RAW_ANGLE_ADDRESS = 0x0c;
-uint8_t const Encoder::STATUS_ADDRESS = 0x0b;
+uint8_t const Encoder::ENCODER_ADDRESS = ENCODER_ADDRESS_;
+uint8_t const Encoder::RAW_ANGLE_ADDRESS = RAW_ANGLE_ADDRESS_;
+uint8_t const Encoder::STATUS_ADDRESS = STATUS_ADDRESS_;
 
 /**
  * Encoder constructor

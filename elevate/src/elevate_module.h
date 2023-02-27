@@ -9,7 +9,7 @@
 #ifndef ELEVATE_MODULE_H_
 #define ELEVATE_MODULE_H_
 
-#include "elevate_utils.h"
+#include "elevate_types.h"
 #include "encoder.h"
 #include "pid_controller.h"
 #include "i2c_multiplexer.h"
@@ -25,7 +25,7 @@ class ElevateModule {
       uint8_t upper_limit_switch_pin,
       uint8_t lower_limit_switch_pin
     );
-    void setup() const;
+    void setup();
     ElevateState get_state() const;
     ElevateStatus get_status() const;
     void update_status();
@@ -43,8 +43,7 @@ class ElevateModule {
     static long const ERROR_THRESHOLD;
 
     static uint8_t const MULTIPLEXER_ADDRESS;
-    static I2CMultiplexer const MULTIPLEXER;
-    static bool multiplexer_initialized;
+    static I2CMultiplexer MULTIPLEXER;
 
     uint8_t const PWM_PIN;
     uint8_t const PWM_CHANNEL;
@@ -54,6 +53,7 @@ class ElevateModule {
 
     Encoder const ENCODER;
 
+    bool is_setup;
     ElevateState state;
     ElevateStatus status;
     PIDController pid_controller;

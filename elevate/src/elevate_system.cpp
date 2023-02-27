@@ -7,12 +7,10 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "elevate_system.h"
-#include "elevate_utils.h"
-#include "elevate_module.h"
-#include "button_panel.h"
+#include "elevate_constants.h"
 #include <arduino.h>
 
-float const ElevateSystem::ROTATIONS_PER_MS = 0.001;
+float const ElevateSystem::ROTATIONS_PER_MS = ROTATIONS_PER_MS_;
 
 /**
  * Elevate System constructor
@@ -28,6 +26,7 @@ ElevateSystem::ElevateSystem(
     MODULES(modules),
     NUMBER_OF_MODULES(number_of_modules),
     BUTTON_PANEL(button_panel) {
+  is_setup = false;
   state = STOPPED;
   height = 0.0;
   previous_move_time = micros();
@@ -37,9 +36,12 @@ ElevateSystem::ElevateSystem(
  * Set up system
  */
 void ElevateSystem::setup() {
-  BUTTON_PANEL->setup();
-  for (int i = 0; i < NUMBER_OF_MODULES; i++) {
-    MODULES[i].setup();
+  if (!is_setup) {
+    BUTTON_PANEL->setup();
+    for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+      MODULES[i].setup();
+    }
+    is_setup = true;
   }
 }
 
@@ -77,23 +79,26 @@ void ElevateSystem::control() {
  * @return system status
  */
 ElevateStatus ElevateSystem::get_status() const {
-  if (is_limited_by_status(LOWER_LIMITED)) {
+  if (is_module_status(MALFUNCTION)) {
+    return MALFUNCTION;
+  }
+  if (is_module_status(LOWER_LIMITED)) {
     return LOWER_LIMITED;
   }
-  if (is_limited_by_status(UPPER_LIMITED)) {
+  if (is_module_status(UPPER_LIMITED)) {
     return UPPER_LIMITED;
   }
   return FINE;
 }
 
 /**
- * Determine if the system is limited by a given status
+ * Determine if the system modules have a given status
  * 
  * @param status given status
  * 
- * @return if the system is limited by the given status
+ * @return if the system modules have a given status
  */
-bool ElevateSystem::is_limited_by_status(ElevateStatus status) const {
+bool ElevateSystem::is_module_status(ElevateStatus status) const {
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     if (MODULES[i].get_status() == status) return true;
   }
@@ -116,11 +121,19 @@ void ElevateSystem::set_state(ElevateState state) {
       this->state = (this->state == STOPPED) ? STOPPED : STOPPING;
       break;
     case MOVING_UP:
-      this->state = (current_status == UPPER_LIMITED) ? STOPPED : MOVING_UP;
+      if (current_status == MALFUNCTION || current_status == UPPER_LIMITED) {
+        this->state = STOPPED;
+      } else {
+        this->state = MOVING_UP;
+      }
       if (current_state != MOVING_UP) previous_move_time = micros();
       break;
     case MOVING_DOWN:
-      this->state = (current_status == LOWER_LIMITED) ? STOPPED : MOVING_DOWN;
+      if (current_status == MALFUNCTION || current_status == LOWER_LIMITED) {
+        this->state = STOPPED;
+      } else {
+        this->state = MOVING_DOWN;
+      }
       if (current_state != MOVING_DOWN) previous_move_time = micros();
       break;
   }

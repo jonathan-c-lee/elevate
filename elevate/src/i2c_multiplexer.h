@@ -14,11 +14,12 @@
 class I2CMultiplexer {
   public:
     I2CMultiplexer(uint8_t address);
-    void setup() const;
+    void setup();
     void select_device(uint8_t port) const;
 
   private:
     uint8_t const ADDRESS;
+    bool is_setup;
 };
 
 #endif

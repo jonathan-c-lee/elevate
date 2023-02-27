@@ -6,42 +6,10 @@
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
  */
-#include "elevate_module.h"
-#include "button_panel.h"
-#include "elevate_system.h"
-
-#define PWM_PIN_0                4
-#define PWM_CHANNEL_0            0
-#define DIRECTION_PIN_0          5
-#define ENCODER_PORT_0           5
-#define UPPER_LIMIT_SWITCH_PIN_0 42
-#define LOWER_LIMIT_SWITCH_PIN_0 41
-
-#define PWM_PIN_1                4
-#define PWM_CHANNEL_1            0
-#define DIRECTION_PIN_1          5
-#define ENCODER_PORT_1           4
-#define UPPER_LIMIT_SWITCH_PIN_1 39
-#define LOWER_LIMIT_SWITCH_PIN_1 38
-
-#define PWM_PIN_2                4
-#define PWM_CHANNEL_2            0
-#define DIRECTION_PIN_2          5
-#define ENCODER_PORT_2           3
-#define UPPER_LIMIT_SWITCH_PIN_2 36
-#define LOWER_LIMIT_SWITCH_PIN_2 35
-
-#define PWM_PIN_3                4
-#define PWM_CHANNEL_3            0
-#define DIRECTION_PIN_3          5
-#define ENCODER_PORT_3           2
-#define UPPER_LIMIT_SWITCH_PIN_3 34
-#define LOWER_LIMIT_SWITCH_PIN_3 33
-
-#define UP_SWITCH_PIN   10
-#define DOWN_SWITCH_PIN 18
-
-int const NUMBER_OF_MODULES = 4;
+#include "src/elevate_constants.h"
+#include "src/elevate_module.h"
+#include "src/button_panel.h"
+#include "src/elevate_system.h"
 
 ElevateModule module_0 = ElevateModule(
   PWM_PIN_0,
@@ -76,6 +44,8 @@ ElevateModule module_3 = ElevateModule(
   LOWER_LIMIT_SWITCH_PIN_3
 );
 
+int const NUMBER_OF_MODULES = 4;
+
 ElevateModule modules[NUMBER_OF_MODULES] = {
   module_0,
   module_1,
@@ -83,7 +53,7 @@ ElevateModule modules[NUMBER_OF_MODULES] = {
   module_3
 };
 
-ButtonPanel button_panel = ButtonPanel(UP_SWITCH_PIN, DOWN_SWITCH_PIN);
+ButtonPanel button_panel = ButtonPanel(UP_SWITCH_PIN_, DOWN_SWITCH_PIN_);
 
 ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES, &button_panel);
 

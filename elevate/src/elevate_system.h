@@ -9,7 +9,7 @@
 #ifndef ELEVATE_SYSTEM_H_
 #define ELEVATE_SYSTEM_H_
 
-#include "elevate_utils.h"
+#include "elevate_types.h"
 #include "elevate_module.h"
 #include "button_panel.h"
 
@@ -27,12 +27,13 @@ class ElevateSystem {
     int const NUMBER_OF_MODULES;
     ButtonPanel* const BUTTON_PANEL;
 
+    bool is_setup;
     ElevateState state;
     float height;
     unsigned long previous_move_time;
 
     ElevateStatus get_status() const;
-    bool is_limited_by_status(ElevateStatus status) const;
+    bool is_module_status(ElevateStatus status) const;
     void set_state(ElevateState state);
     void update_module_status();
     void update_system_state();

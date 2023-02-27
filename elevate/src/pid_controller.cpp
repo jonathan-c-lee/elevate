@@ -7,7 +7,6 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "pid_controller.h"
-#include "elevate_utils.h"
 #include <arduino.h>
 
 /**

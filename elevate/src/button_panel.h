@@ -1,5 +1,5 @@
 /**
- * @file button_panel.cpp
+ * @file button_panel.h
  * 
  * @brief header file for button panel
  * 

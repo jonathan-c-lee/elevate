@@ -13,6 +13,7 @@
 
 bool switch_pressed(
     uint8_t switch_pin,
+    unsigned long delay_ms,
     uint8_t& switch_state,
     uint8_t& previous_state,
     unsigned long& previous_time

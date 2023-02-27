@@ -9,7 +9,16 @@
 #ifndef PID_CONTROLLER_H_
 #define PID_CONTROLLER_H_
 
-#include "elevate_utils.h"
+/**
+ * Mode for PID controller
+ * 
+ * ON:  PID controller is on
+ * OFF: PID controller is off
+ */
+enum Mode {
+  ON,
+  OFF
+};
 
 class PIDController {
   public:

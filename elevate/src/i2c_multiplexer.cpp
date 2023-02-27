@@ -7,25 +7,28 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "i2c_multiplexer.h"
+#include "elevate_constants.h"
 #include <arduino.h>
 #include <Wire.h>
-
-int const SDA_PIN = 1;
-int const SCL_PIN = 2;
 
 /**
  * I2C Multiplexer constructor
  * 
  * @param address address of I2C multiplexer
  */
-I2CMultiplexer::I2CMultiplexer(uint8_t address) : ADDRESS(address) {}
+I2CMultiplexer::I2CMultiplexer(uint8_t address) : ADDRESS(address) {
+  is_setup = false;
+}
 
 /**
  * Set up I2C multiplexer
  */
-void I2CMultiplexer::setup() const {
-  Wire.setPins(SDA_PIN, SCL_PIN);
-  Wire.begin();
+void I2CMultiplexer::setup() {
+  if (!is_setup) {
+    Wire.setPins(SDA_PIN, SCL_PIN);
+    Wire.begin();
+    is_setup = true;
+  }
 }
 
 /**

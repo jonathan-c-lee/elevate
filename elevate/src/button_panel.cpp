@@ -7,6 +7,7 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "button_panel.h"
+#include "elevate_constants.h"
 #include "switch_utility.h"
 #include <arduino.h>
 
@@ -36,7 +37,13 @@ bool ButtonPanel::up_switch_pressed() const {
   static uint8_t switch_state = digitalRead(UP_SWITCH_PIN);
   static uint8_t previous_state = digitalRead(UP_SWITCH_PIN);
   static unsigned long previous_time = millis();
-  return switch_pressed(UP_SWITCH_PIN, switch_state, previous_state, previous_time);
+  return switch_pressed(
+    UP_SWITCH_PIN,
+    USER_INPUT_DELAY_MS,
+    switch_state,
+    previous_state,
+    previous_time
+  );
 }
 
 /**
@@ -48,5 +55,11 @@ bool ButtonPanel::down_switch_pressed() const {
   static uint8_t switch_state = digitalRead(DOWN_SWITCH_PIN);
   static uint8_t previous_state = digitalRead(DOWN_SWITCH_PIN);
   static unsigned long previous_time = millis();
-  return switch_pressed(DOWN_SWITCH_PIN, switch_state, previous_state, previous_time);
+  return switch_pressed(
+    DOWN_SWITCH_PIN,
+    USER_INPUT_DELAY_MS,
+    switch_state,
+    previous_state,
+    previous_time
+  );
 }

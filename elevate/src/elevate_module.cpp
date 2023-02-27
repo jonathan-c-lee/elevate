@@ -7,27 +7,23 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "elevate_module.h"
-#include "elevate_utils.h"
+#include "elevate_constants.h"
 #include "switch_utility.h"
-#include "encoder.h"
-#include "pid_controller.h"
-#include "i2c_multiplexer.h"
 #include <arduino.h>
 
-uint32_t const ElevateModule::MOTOR_FREQUENCY = 10000;
-uint8_t const ElevateModule::MOTOR_RESOLUTION_BITS = 10;
+uint32_t const ElevateModule::MOTOR_FREQUENCY = MOTOR_FREQUENCY_;
+uint8_t const ElevateModule::MOTOR_RESOLUTION_BITS = MOTOR_RESOLUTION_BITS_;
 
-float const ElevateModule::KP = 2.0;
-float const ElevateModule::KI = 0.2;
-float const ElevateModule::KD = 0.2;
-unsigned long const ElevateModule::PID_RATE_MS = 50;
-int const ElevateModule::MINIMUM_OUTPUT = (-1 << MOTOR_RESOLUTION_BITS) + 1;
-int const ElevateModule::MAXIMUM_OUTPUT = (1 << MOTOR_RESOLUTION_BITS) - 1;
-long const ElevateModule::ERROR_THRESHOLD = 10;
+float const ElevateModule::KP = KP_;
+float const ElevateModule::KI = KI_;
+float const ElevateModule::KD = KD_;
+unsigned long const ElevateModule::PID_RATE_MS = PID_RATE_MS_;
+int const ElevateModule::MINIMUM_OUTPUT = MINIMUM_OUTPUT_;
+int const ElevateModule::MAXIMUM_OUTPUT = MAXIMUM_OUTPUT_;
+long const ElevateModule::ERROR_THRESHOLD = ERROR_THRESHOLD_;
 
-uint8_t const ElevateModule::MULTIPLEXER_ADDRESS = 0x70;
-I2CMultiplexer const ElevateModule::MULTIPLEXER = I2CMultiplexer(MULTIPLEXER_ADDRESS);
-bool ElevateModule::multiplexer_initialized = false;
+uint8_t const ElevateModule::MULTIPLEXER_ADDRESS = MULTIPLEXER_ADDRESS_;
+I2CMultiplexer ElevateModule::MULTIPLEXER = I2CMultiplexer(MULTIPLEXER_ADDRESS);
 
 /**
  * Elevate Module constructor
@@ -53,6 +49,7 @@ ElevateModule::ElevateModule(
     UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
     LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin),
     pid_controller(KP, KI, KD, PID_RATE_MS, MINIMUM_OUTPUT, MAXIMUM_OUTPUT) {
+  is_setup = false;
   state = STOPPED;
   status = FINE;
   height = 0;
@@ -62,14 +59,14 @@ ElevateModule::ElevateModule(
 /**
  * Set up module
  */
-void ElevateModule::setup() const {
-  pwm_setup(PWM_CHANNEL, PWM_PIN);
-  pinMode(DIRECTION_PIN, OUTPUT);
-  pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
-  pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
-  if (!multiplexer_initialized) {
+void ElevateModule::setup() {
+  if (!is_setup) {
+    pwm_setup(PWM_CHANNEL, PWM_PIN);
+    pinMode(DIRECTION_PIN, OUTPUT);
+    pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
+    pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
     MULTIPLEXER.setup();
-    multiplexer_initialized = true;
+    is_setup = true;
   }
 }
 
@@ -95,7 +92,9 @@ ElevateStatus ElevateModule::get_status() const {
  * Update module status
  */
 void ElevateModule::update_status() {
-  if (upper_limit_switch_pressed()) {
+  if (upper_limit_switch_pressed() && lower_limit_switch_pressed()) {
+    status = MALFUNCTION;
+  } else if (upper_limit_switch_pressed()) {
     status = UPPER_LIMITED;
   } else if (lower_limit_switch_pressed()) {
     status = LOWER_LIMITED;
@@ -139,7 +138,7 @@ void ElevateModule::move(long height) {
 }
 
 /**
- * Set up the pwm pins of the module
+ * Set up the pwm pin of the module
  * 
  * @param channel pwm channel
  * @param pin     pwm pin
@@ -159,7 +158,13 @@ bool ElevateModule::upper_limit_switch_pressed() const {
   static uint8_t switch_state = digitalRead(UPPER_LIMIT_SWITCH_PIN);
   static uint8_t previous_state = digitalRead(UPPER_LIMIT_SWITCH_PIN);
   static unsigned long previous_time = millis();
-  return switch_pressed(UPPER_LIMIT_SWITCH_PIN, switch_state, previous_state, previous_time);
+  return switch_pressed(
+    UPPER_LIMIT_SWITCH_PIN,
+    DEBOUNCE_DELAY_MS,
+    switch_state,
+    previous_state,
+    previous_time
+  );
 }
 
 /**
@@ -171,7 +176,13 @@ bool ElevateModule::lower_limit_switch_pressed() const {
   static uint8_t switch_state = digitalRead(LOWER_LIMIT_SWITCH_PIN);
   static uint8_t previous_state = digitalRead(LOWER_LIMIT_SWITCH_PIN);
   static unsigned long previous_time = millis();
-  return switch_pressed(LOWER_LIMIT_SWITCH_PIN, switch_state, previous_state, previous_time);
+  return switch_pressed(
+    LOWER_LIMIT_SWITCH_PIN,
+    DEBOUNCE_DELAY_MS,
+    switch_state,
+    previous_state,
+    previous_time
+  );
 }
 
 /**

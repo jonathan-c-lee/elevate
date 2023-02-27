@@ -1,15 +1,13 @@
 /**
- * @file elevate_utils.h
+ * @file elevate_types.h
  * 
- * @brief constants and types for ELEVATE modules and systems
+ * @brief types for ELEVATE modules and systems
  * 
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
  */
-#ifndef ELEVATE_UTILS_H_
-#define ELEVATE_UTILS_H_
-
-int const UNITS_PER_ROTATION = 1 << 12;
+#ifndef ELEVATE_TYPES_H_
+#define ELEVATE_TYPES_H_
 
 /**
  * Elevate Status
@@ -17,11 +15,13 @@ int const UNITS_PER_ROTATION = 1 << 12;
  * FINE:          no limitations
  * UPPER_LIMITED: maximum height reached
  * LOWER_LIMITED: minimum height reached
+ * MALFUNCTION:   system failure
  */
 enum ElevateStatus {
   FINE,
   UPPER_LIMITED,
-  LOWER_LIMITED
+  LOWER_LIMITED,
+  MALFUNCTION
 };
 
 /**
@@ -37,17 +37,6 @@ enum ElevateState {
   STOPPING,
   MOVING_UP,
   MOVING_DOWN
-};
-
-/**
- * Mode for PID controller
- * 
- * ON:  PID controller is on
- * OFF: PID controller is off
- */
-enum Mode {
-  ON,
-  OFF
 };
 
 #endif
