@@ -12,12 +12,12 @@
 #include <arduino.h>
 
 // Pin constants
-#define PWM_PIN_0                4
+#define PWM_PIN_0                6
 #define PWM_CHANNEL_0            0
-#define DIRECTION_PIN_0          5
-#define ENCODER_PORT_0           5
-#define UPPER_LIMIT_SWITCH_PIN_0 42
-#define LOWER_LIMIT_SWITCH_PIN_0 41
+#define DIRECTION_PIN_0          39
+#define ENCODER_PORT_0           0
+#define UPPER_LIMIT_SWITCH_PIN_0 21
+#define LOWER_LIMIT_SWITCH_PIN_0 5
 
 #define PWM_PIN_1                4
 #define PWM_CHANNEL_1            0
@@ -40,8 +40,8 @@
 #define UPPER_LIMIT_SWITCH_PIN_3 34
 #define LOWER_LIMIT_SWITCH_PIN_3 33
 
-#define UP_SWITCH_PIN_   10
-#define DOWN_SWITCH_PIN_ 18
+#define UP_SWITCH_PIN_   43
+#define DOWN_SWITCH_PIN_ 44
 
 // Switch constants
 unsigned long const DEBOUNCE_DELAY_MS = 25;

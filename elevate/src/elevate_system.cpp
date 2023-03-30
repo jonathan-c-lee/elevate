@@ -65,9 +65,11 @@ void ElevateSystem::control() {
       smooth_stop();
       break;
     case MOVING_UP:
+      Serial.println("UP");
       move_up();
       break;
     case MOVING_DOWN:
+      Serial.println("DOWN");
       move_down();
       break;
   }
