@@ -40,8 +40,8 @@
 #define UPPER_LIMIT_SWITCH_PIN_3 34
 #define LOWER_LIMIT_SWITCH_PIN_3 33
 
-#define UP_SWITCH_PIN_   43
-#define DOWN_SWITCH_PIN_ 44
+#define UP_SWITCH_PIN_   35
+#define DOWN_SWITCH_PIN_ 37
 
 // Switch constants
 unsigned long const DEBOUNCE_DELAY_MS = 25;

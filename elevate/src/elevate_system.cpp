@@ -145,6 +145,7 @@ void ElevateSystem::set_state(ElevateState state) {
  * Update the status of all modules in the system
  */
 void ElevateSystem::update_module_status() {
+  return;
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     MODULES[i].update_status();
   }
@@ -191,6 +192,7 @@ void ElevateSystem::smooth_stop() {
  * Command the system to move
  */
 void ElevateSystem::move() {
+  return;
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     MODULES[i].move((long) height);
   }
