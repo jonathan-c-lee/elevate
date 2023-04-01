@@ -62,14 +62,13 @@ void ElevateSystem::control() {
       hard_stop();
       break;
     case STOPPING:
-      smooth_stop();
+      hard_stop();
+      // smooth_stop();
       break;
     case MOVING_UP:
-      Serial.println("UP");
       move_up();
       break;
     case MOVING_DOWN:
-      Serial.println("DOWN");
       move_down();
       break;
   }
@@ -145,7 +144,6 @@ void ElevateSystem::set_state(ElevateState state) {
  * Update the status of all modules in the system
  */
 void ElevateSystem::update_module_status() {
-  return;
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     MODULES[i].update_status();
   }
@@ -192,7 +190,6 @@ void ElevateSystem::smooth_stop() {
  * Command the system to move
  */
 void ElevateSystem::move() {
-  return;
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     MODULES[i].move((long) height);
   }
@@ -205,6 +202,7 @@ void ElevateSystem::move_up() {
   unsigned long current_time = micros();
   height += UNITS_PER_ROTATION * ROTATIONS_PER_MS * (current_time - previous_move_time) * 1e-3;
   previous_move_time = current_time;
+  // height = 1.00;
   move();
 }
 
@@ -215,5 +213,6 @@ void ElevateSystem::move_down() {
   unsigned long current_time = micros();
   height -= UNITS_PER_ROTATION * ROTATIONS_PER_MS * (current_time - previous_move_time) * 1e-3;
   previous_move_time = current_time;
+  // height = -1.00;
   move();
 }

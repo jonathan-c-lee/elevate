@@ -25,8 +25,7 @@ I2CMultiplexer::I2CMultiplexer(uint8_t address) : ADDRESS(address) {
  */
 void I2CMultiplexer::setup() {
   if (!is_setup) {
-    Wire.setPins(SDA_PIN, SCL_PIN);
-    Wire.begin();
+    Wire.begin(SDA_PIN, SCL_PIN);
     is_setup = true;
   }
 }

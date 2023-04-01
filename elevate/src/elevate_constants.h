@@ -15,7 +15,7 @@
 #define PWM_PIN_0                6
 #define PWM_CHANNEL_0            0
 #define DIRECTION_PIN_0          39
-#define ENCODER_PORT_0           0
+#define ENCODER_PORT_0           1
 #define UPPER_LIMIT_SWITCH_PIN_0 21
 #define LOWER_LIMIT_SWITCH_PIN_0 5
 
@@ -52,6 +52,7 @@ int const UNITS_PER_ROTATION = 1 << 12;
 uint8_t const ENCODER_ADDRESS_ = 0x36;
 uint8_t const RAW_ANGLE_ADDRESS_ = 0x0c;
 uint8_t const STATUS_ADDRESS_ = 0x0b;
+unsigned long const WAIT_TIME_MS = 50;
 
 // I2C multiplexer constants
 int const SDA_PIN = 1;

@@ -135,6 +135,7 @@ void ElevateModule::smooth_stop(long height) {
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
   set_speed(pid_controller.control(height, get_height()));
+  // set_speed(height);
 }
 
 /**
@@ -225,10 +226,12 @@ void ElevateModule::set_speed(int speed) {
   } else if (speed > 0) {
     digitalWrite(DIRECTION_PIN, HIGH);
     ledcWrite(PWM_CHANNEL, speed);
+    // ledcWrite(PWM_CHANNEL, 500);
     state = MOVING_UP;
   } else {
     digitalWrite(DIRECTION_PIN, LOW);
     ledcWrite(PWM_CHANNEL, -speed);
+    // ledcWrite(PWM_CHANNEL, 500);
     state = MOVING_DOWN;
   }
 }

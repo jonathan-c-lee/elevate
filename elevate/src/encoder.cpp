@@ -78,12 +78,17 @@ MagnetStrength Encoder::get_magnet_strength() const {
  * @return one byte of information
  */
 int Encoder::read_one_byte(uint8_t address) {
+  static int reading = 0;
   Wire.beginTransmission(ENCODER_ADDRESS);
   Wire.write(address);
   Wire.endTransmission();
   Wire.requestFrom(ENCODER_ADDRESS, (uint8_t) 1);
-  while (Wire.available() == 0);
-  return (int) Wire.read();
+  unsigned long start = millis();
+  while (Wire.available() == 0) {
+    if (millis() - start > WAIT_TIME_MS) return reading;
+  };
+  reading = (int) Wire.read();
+  return reading;
 }
 
 /**
@@ -94,12 +99,18 @@ int Encoder::read_one_byte(uint8_t address) {
  * @return two bytes of information
  */
 int Encoder::read_two_bytes(uint8_t address) {
+  static int reading = 0;
   Wire.beginTransmission(ENCODER_ADDRESS);
   Wire.write(address);
   Wire.endTransmission();
   Wire.requestFrom(ENCODER_ADDRESS, (uint8_t) 2);
-  while (Wire.available() < 2);
+  unsigned long start = millis();
+  while (Wire.available() < 2) {
+    if (millis() - start > WAIT_TIME_MS) return reading;
+  };
   int high_byte = Wire.read();
   int low_byte = Wire.read();
-  return (high_byte << 8) | low_byte;
+  Serial.println("exit read 2 bytes");
+  reading = (high_byte << 8) | low_byte;
+  return reading;
 }
