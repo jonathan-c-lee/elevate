@@ -211,6 +211,7 @@ long ElevateModule::get_height() {
     height += increase;
   }
   previous_angle = current_angle;
+  Serial.println(height);
   return height;
 }
 

@@ -102,15 +102,17 @@ int Encoder::read_two_bytes(uint8_t address) {
   static int reading = 0;
   Wire.beginTransmission(ENCODER_ADDRESS);
   Wire.write(address);
-  Wire.endTransmission();
+  if (!Wire.endTransmission()) return reading;
   Wire.requestFrom(ENCODER_ADDRESS, (uint8_t) 2);
   unsigned long start = millis();
   while (Wire.available() < 2) {
-    if (millis() - start > WAIT_TIME_MS) return reading;
+    if ((millis() - start) > WAIT_TIME_MS) {
+      Serial.println("Fail");
+      return reading;
+    }
   };
   int high_byte = Wire.read();
   int low_byte = Wire.read();
-  Serial.println("exit read 2 bytes");
   reading = (high_byte << 8) | low_byte;
   return reading;
 }

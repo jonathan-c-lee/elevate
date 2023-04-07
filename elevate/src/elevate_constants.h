@@ -12,12 +12,12 @@
 #include <arduino.h>
 
 // Pin constants
-#define PWM_PIN_0                6
+#define PWM_PIN_0                16
 #define PWM_CHANNEL_0            0
-#define DIRECTION_PIN_0          39
-#define ENCODER_PORT_0           1
-#define UPPER_LIMIT_SWITCH_PIN_0 21
-#define LOWER_LIMIT_SWITCH_PIN_0 5
+#define DIRECTION_PIN_0          3
+#define ENCODER_PORT_0           3
+#define UPPER_LIMIT_SWITCH_PIN_0 15
+#define LOWER_LIMIT_SWITCH_PIN_0 14
 
 #define PWM_PIN_1                4
 #define PWM_CHANNEL_1            0
@@ -40,8 +40,8 @@
 #define UPPER_LIMIT_SWITCH_PIN_3 34
 #define LOWER_LIMIT_SWITCH_PIN_3 33
 
-#define UP_SWITCH_PIN_   35
-#define DOWN_SWITCH_PIN_ 37
+#define UP_SWITCH_PIN_   42
+#define DOWN_SWITCH_PIN_ 41
 
 // Switch constants
 unsigned long const DEBOUNCE_DELAY_MS = 25;
@@ -52,11 +52,12 @@ int const UNITS_PER_ROTATION = 1 << 12;
 uint8_t const ENCODER_ADDRESS_ = 0x36;
 uint8_t const RAW_ANGLE_ADDRESS_ = 0x0c;
 uint8_t const STATUS_ADDRESS_ = 0x0b;
-unsigned long const WAIT_TIME_MS = 50;
+unsigned long const WAIT_TIME_MS = 25;
 
 // I2C multiplexer constants
 int const SDA_PIN = 1;
 int const SCL_PIN = 2;
+uint32_t I2C_FREQUENCY = 5000;
 
 // Elevate module constants
 uint32_t const MOTOR_FREQUENCY_ = 10000;
