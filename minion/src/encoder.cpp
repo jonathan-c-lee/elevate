@@ -7,18 +7,13 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "encoder.h"
+#include "minion_constants.h"
 #include <Arduino.h>
 #include <Wire.h>
 
-int const SDA_PIN = 18;
-int const SCL_PIN = 19;
-uint32_t I2C_FREQUENCY = 100000;
-
-unsigned long const WAIT_TIME_MS = 10;
-
-uint8_t const Encoder::ENCODER_ADDRESS = 0x36;
-uint8_t const Encoder::RAW_ANGLE_ADDRESS = 0x0c;
-uint8_t const Encoder::STATUS_ADDRESS = 0x0b;
+uint8_t const Encoder::ENCODER_ADDRESS = ENCODER_ADDRESS_;
+uint8_t const Encoder::RAW_ANGLE_ADDRESS = RAW_ANGLE_ADDRESS_;
+uint8_t const Encoder::STATUS_ADDRESS = STATUS_ADDRESS_;
 
 /**
  * Encoder constructor

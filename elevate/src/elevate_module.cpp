@@ -8,7 +8,6 @@
  */
 #include "elevate_module.h"
 #include "elevate_constants.h"
-#include "switch_utility.h"
 #include <Arduino.h>
 
 uint32_t const ElevateModule::MOTOR_FREQUENCY = MOTOR_FREQUENCY_;
@@ -28,26 +27,18 @@ long const ElevateModule::ERROR_THRESHOLD = ERROR_THRESHOLD_;
  * @param pwm_pin                pwm pin
  * @param pwm_channel            pwm channel
  * @param direction_pin          direction pin
- * @param upper_limit_switch_pin upper limit switch input pin
- * @param lower_limit_switch_pin lower limit switch input pin
  */
-ElevateModule::ElevateModule(
-    uint8_t pwm_pin,
-    uint8_t pwm_channel,
-    uint8_t direction_pin,
-    uint8_t upper_limit_switch_pin,
-    uint8_t lower_limit_switch_pin) :
-    PWM_PIN(pwm_pin),
-    PWM_CHANNEL(pwm_channel),
-    DIRECTION_PIN(direction_pin),
-    UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
-    LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin),
-    pid_controller(KP, KI, KD, PID_RATE_MS, MINIMUM_OUTPUT, MAXIMUM_OUTPUT) {
+ElevateModule::ElevateModule(uint8_t pwm_pin, uint8_t pwm_channel, uint8_t direction_pin) :
+PWM_PIN(pwm_pin),
+PWM_CHANNEL(pwm_channel),
+DIRECTION_PIN(direction_pin),
+pid_controller(KP, KI, KD, PID_RATE_MS, MINIMUM_OUTPUT, MAXIMUM_OUTPUT) {
   is_setup = false;
   state = STOPPED;
   status = FINE;
   height = 0;
-  previous_angle = 0;
+  lower_limit_switch_pressed = false;
+  upper_limit_switch_pressed = false;
 }
 
 /**
@@ -57,12 +48,6 @@ void ElevateModule::setup() {
   if (!is_setup) {
     pwm_setup(PWM_CHANNEL, PWM_PIN);
     pinMode(DIRECTION_PIN, OUTPUT);
-    pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
-    pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
-
-    // wait for first angle reading and then update height
-    delay(25);
-    height = 0;
     is_setup = true;
   }
 }
@@ -86,23 +71,14 @@ ElevateStatus ElevateModule::get_status() const {
 }
 
 /**
- * Get the height of the module
- * 
- * @return height of the module
- */
-long ElevateModule::get_height() {
-  return height;
-}
-
-/**
  * Update module status
  */
 void ElevateModule::update_status() {
-  if (upper_limit_switch_pressed() && lower_limit_switch_pressed()) {
+  if (upper_limit_switch_pressed && lower_limit_switch_pressed) {
     status = MALFUNCTION;
-  } else if (upper_limit_switch_pressed()) {
+  } else if (upper_limit_switch_pressed) {
     status = UPPER_LIMITED;
-  } else if (lower_limit_switch_pressed()) {
+  } else if (lower_limit_switch_pressed) {
     status = LOWER_LIMITED;
   } else {
     status = FINE;
@@ -124,11 +100,11 @@ void ElevateModule::hard_stop() {
  */
 void ElevateModule::smooth_stop(long height) {
   if (state == STOPPED) return;
-  if (abs(get_height() - height) < ERROR_THRESHOLD) {
+  if (abs(this->height - height) < ERROR_THRESHOLD) {
     hard_stop();
   } else {
     pid_controller.set_mode(ON);
-    set_speed(pid_controller.control(height, get_height()));
+    set_speed(pid_controller.control(height, this->height));
   }
 }
 
@@ -139,25 +115,21 @@ void ElevateModule::smooth_stop(long height) {
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
-  set_speed(pid_controller.control(height, get_height()));
+  set_speed(pid_controller.control(height, this->height));
 }
 
 /**
- * Update the height of the module
+ * Update module readings
  * 
  * :param current_angle: the current angle reading
- * :return: module height
  */
-long ElevateModule::update_height(int current_angle) {
-  int increase = (current_angle - previous_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
-  int decrease = (previous_angle - current_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
-  if (increase > decrease) {
-    height -= decrease;
-  } else {
-    height += increase;
-  }
-  previous_angle = current_angle;
-  return height;
+void ElevateModule::update(
+    long height,
+    bool lower_limit_switch_pressed,
+    bool upper_limit_switch_pressed) {
+  this->height = height;
+  this->lower_limit_switch_pressed = lower_limit_switch_pressed;
+  this->upper_limit_switch_pressed = upper_limit_switch_pressed;
 }
 
 /**
@@ -170,42 +142,6 @@ void ElevateModule::pwm_setup(uint8_t channel, uint8_t pin) const {
   ledcSetup(channel, MOTOR_FREQUENCY, MOTOR_RESOLUTION_BITS);
   ledcAttachPin(pin, channel);
   ledcWrite(channel, 0);
-}
-
-/**
- * Determine if upper limit switch is pressed
- * 
- * @return if upper limit switch is pressed
- */
-bool ElevateModule::upper_limit_switch_pressed() const {
-  static uint8_t switch_state = digitalRead(UPPER_LIMIT_SWITCH_PIN);
-  static uint8_t previous_state = digitalRead(UPPER_LIMIT_SWITCH_PIN);
-  static unsigned long previous_time = millis();
-  return switch_pressed(
-    UPPER_LIMIT_SWITCH_PIN,
-    DEBOUNCE_DELAY_MS,
-    switch_state,
-    previous_state,
-    previous_time
-  );
-}
-
-/**
- * Determine if lower limit switch is pressed
- * 
- * @return if lower limit switch is pressed
- */
-bool ElevateModule::lower_limit_switch_pressed() const {
-  static uint8_t switch_state = digitalRead(LOWER_LIMIT_SWITCH_PIN);
-  static uint8_t previous_state = digitalRead(LOWER_LIMIT_SWITCH_PIN);
-  static unsigned long previous_time = millis();
-  return switch_pressed(
-    LOWER_LIMIT_SWITCH_PIN,
-    DEBOUNCE_DELAY_MS,
-    switch_state,
-    previous_state,
-    previous_time
-  );
 }
 
 /**

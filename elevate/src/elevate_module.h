@@ -15,22 +15,15 @@
 
 class ElevateModule {
   public:
-    ElevateModule(
-      uint8_t pwm_pin,
-      uint8_t pwm_channel,
-      uint8_t direction_pin,
-      uint8_t upper_limit_switch_pin,
-      uint8_t lower_limit_switch_pin
-    );
+    ElevateModule(uint8_t pwm_pin, uint8_t pwm_channel, uint8_t direction_pin);
     void setup();
     ElevateState get_state() const;
     ElevateStatus get_status() const;
-    long get_height();
     void update_status();
     void hard_stop();
     void smooth_stop(long height);
     void move(long height);
-    long update_height(int current_angle);
+    void update(long height, bool lower_limit_switch_pressed, bool upper_limit_switch_pressed);
 
   private:
     static uint32_t const MOTOR_FREQUENCY;
@@ -44,19 +37,16 @@ class ElevateModule {
     uint8_t const PWM_PIN;
     uint8_t const PWM_CHANNEL;
     uint8_t const DIRECTION_PIN;
-    uint8_t const UPPER_LIMIT_SWITCH_PIN;
-    uint8_t const LOWER_LIMIT_SWITCH_PIN;
 
     bool is_setup;
     ElevateState state;
     ElevateStatus status;
     PIDController pid_controller;
     long height;
-    int previous_angle;
+    bool lower_limit_switch_pressed;
+    bool upper_limit_switch_pressed;
 
     void pwm_setup(uint8_t channel, uint8_t pin) const;
-    bool upper_limit_switch_pressed() const;
-    bool lower_limit_switch_pressed() const;
     void set_speed(int speed);
 };
 

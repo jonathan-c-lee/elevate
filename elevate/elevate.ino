@@ -16,42 +16,38 @@
 /**
  * Struct for messages from encoder minion
  * 
- * id:    minion ID
- * angle: angle reading
+ * id:                         minion ID
+ * height:                     module height
+ * lower_limit_switch_pressed: whether or not the lower limit switch is pressed
+ * upper_limit_switch_pressed: whether or not the upper limit switch is pressed
  */
 struct MinionMessage {
   unsigned int id;
-  int angle;
+  int height;
+  bool lower_limit_switch_pressed;
+  bool upper_limit_switch_pressed;
 };
 MinionMessage message;
 
 ElevateModule module_0 = ElevateModule(
   PWM_PIN_0,
   PWM_CHANNEL_0,
-  DIRECTION_PIN_0,
-  UPPER_LIMIT_SWITCH_PIN_0,
-  LOWER_LIMIT_SWITCH_PIN_0
+  DIRECTION_PIN_0
 );
 // ElevateModule module_1 = ElevateModule(
 //   PWM_PIN_1,
 //   PWM_CHANNEL_1,
-//   DIRECTION_PIN_1,
-//   UPPER_LIMIT_SWITCH_PIN_1,
-//   LOWER_LIMIT_SWITCH_PIN_1
+//   DIRECTION_PIN_1
 // );
 // ElevateModule module_2 = ElevateModule(
 //   PWM_PIN_2,
 //   PWM_CHANNEL_2,
-//   DIRECTION_PIN_2,
-//   UPPER_LIMIT_SWITCH_PIN_2,
-//   LOWER_LIMIT_SWITCH_PIN_2
+//   DIRECTION_PIN_2
 // );
 // ElevateModule module_3 = ElevateModule(
 //   PWM_PIN_3,
 //   PWM_CHANNEL_3,
-//   DIRECTION_PIN_3,
-//   UPPER_LIMIT_SWITCH_PIN_3,
-//   LOWER_LIMIT_SWITCH_PIN_3
+//   DIRECTION_PIN_3
 // );
 
 int const NUMBER_OF_MODULES = 1;
@@ -72,7 +68,11 @@ ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES, &button_panel)
  */
 void receive_callback(const uint8_t* mac_address, const uint8_t* data, int len) {
   memcpy(&message, data, sizeof(message));
-  modules[message.id].update_height(message.angle);
+  modules[message.id].update(
+    message.height,
+    message.lower_limit_switch_pressed,
+    message.upper_limit_switch_pressed
+  );
 }
 
 void setup() {
