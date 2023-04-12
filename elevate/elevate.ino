@@ -6,10 +6,24 @@
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu
  */
+#include <WiFi.h>
+#include <esp_now.h>
 #include "src/elevate_constants.h"
 #include "src/elevate_module.h"
 #include "src/button_panel.h"
 #include "src/elevate_system.h"
+
+/**
+ * Struct for messages from encoder minion
+ * 
+ * id:    minion ID
+ * angle: angle reading
+ */
+struct MinionMessage {
+  unsigned int id;
+  int angle;
+};
+MinionMessage message;
 
 ElevateModule module_0 = ElevateModule(
   PWM_PIN_0,
@@ -57,12 +71,21 @@ ButtonPanel button_panel = ButtonPanel(UP_SWITCH_PIN_, DOWN_SWITCH_PIN_);
 
 ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES, &button_panel);
 
+void receive_callback(const uint8_t* mac_address, const uint8_t* data, int len) {
+  memcpy(&message, data, sizeof(message));
+  modules[message.id].update_height(message.angle);
+}
+
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
+  WiFi.mode(WIFI_STA);
+  if (esp_now_init() != ESP_OK) return;
+  esp_now_register_recv_cb(receive_callback);
   elevate.setup();
 }
 
 void loop() {
-  elevate.update();
+  //elevate.update();
   elevate.control();
+  delay(100);
 }

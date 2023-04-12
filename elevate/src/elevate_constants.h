@@ -57,7 +57,7 @@ unsigned long const WAIT_TIME_MS = 25;
 // I2C multiplexer constants
 int const SDA_PIN = 1;
 int const SCL_PIN = 2;
-uint32_t I2C_FREQUENCY = 5000;
+uint32_t const I2C_FREQUENCY = 5000;
 
 // Elevate module constants
 uint32_t const MOTOR_FREQUENCY_ = 10000;
@@ -66,7 +66,7 @@ float const KP_ = 2.0;
 float const KI_ = 0.2;
 float const KD_ = 0.2;
 unsigned long const PID_RATE_MS_ = 50;
-int const MINIMUM_OUTPUT_ = (-1 << MOTOR_RESOLUTION_BITS_) + 1;
+int const MINIMUM_OUTPUT_ = -(1 << MOTOR_RESOLUTION_BITS_) + 1;
 int const MAXIMUM_OUTPUT_ = (1 << MOTOR_RESOLUTION_BITS_) - 1;
 long const ERROR_THRESHOLD_ = 10;
 uint8_t const MULTIPLEXER_ADDRESS_ = 0x70;

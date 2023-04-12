@@ -65,7 +65,7 @@ void ElevateModule::setup() {
     pinMode(DIRECTION_PIN, OUTPUT);
     pinMode(UPPER_LIMIT_SWITCH_PIN, INPUT);
     pinMode(LOWER_LIMIT_SWITCH_PIN, INPUT);
-    MULTIPLEXER.setup();
+    //MULTIPLEXER.setup();
     is_setup = true;
   }
 }
@@ -134,8 +134,30 @@ void ElevateModule::smooth_stop(long height) {
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
+  Serial.print("DESIRED: ");
+  Serial.println(height);
+  Serial.print("CURRENT: ");
+  Serial.println(get_height());
   set_speed(pid_controller.control(height, get_height()));
   // set_speed(height);
+}
+
+/**
+ * Update the height of the module
+ * 
+ * :param current_angle: the current angle reading
+ * :return: module height
+ */
+long ElevateModule::update_height(int current_angle) {
+  int increase = (current_angle - previous_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
+  int decrease = (previous_angle - current_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
+  if (increase > decrease) {
+    height -= decrease;
+  } else {
+    height += increase;
+  }
+  previous_angle = current_angle;
+  return height;
 }
 
 /**
@@ -197,21 +219,11 @@ int ElevateModule::get_angle() const {
 }
 
 /**
- * Update and get the height of the module
+ * Get the height of the module
  * 
  * @return height of the module
  */
 long ElevateModule::get_height() {
-  int current_angle = get_angle();
-  int increase = (current_angle - previous_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
-  int decrease = (previous_angle - current_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
-  if (increase > decrease) {
-    height -= decrease;
-  } else {
-    height += increase;
-  }
-  previous_angle = current_angle;
-  Serial.println(height);
   return height;
 }
 
@@ -221,6 +233,8 @@ long ElevateModule::get_height() {
  * @param speed speed to set the module at
  */
 void ElevateModule::set_speed(int speed) {
+  Serial.print("SPEED: ");
+  Serial.println(speed);
   if (speed == 0) {
     ledcWrite(PWM_CHANNEL, 0);
     state = STOPPED;

@@ -32,6 +32,7 @@ class ElevateModule {
     void hard_stop();
     void smooth_stop(long height);
     void move(long height);
+    long update_height(int current_angle);
 
   private:
     static uint32_t const MOTOR_FREQUENCY;

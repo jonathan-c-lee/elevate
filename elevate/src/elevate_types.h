@@ -1,7 +1,7 @@
 /**
  * @file elevate_types.h
  * 
- * @brief types for ELEVATE modules and systems
+ * @brief types and structs for ELEVATE modules and systems
  * 
  * @author Jonathan Lee
  * Contact: jonlee27@seas.upenn.edu

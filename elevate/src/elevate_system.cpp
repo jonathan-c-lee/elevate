@@ -57,21 +57,22 @@ void ElevateSystem::update() {
  * Control the system based on its state
  */
 void ElevateSystem::control() {
-  switch (state) {
-    case STOPPED:
-      hard_stop();
-      break;
-    case STOPPING:
-      hard_stop();
-      // smooth_stop();
-      break;
-    case MOVING_UP:
-      move_up();
-      break;
-    case MOVING_DOWN:
-      move_down();
-      break;
-  }
+  move_up();
+  // switch (state) {
+  //   case STOPPED:
+  //     hard_stop();
+  //     break;
+  //   case STOPPING:
+  //     hard_stop();
+  //     // smooth_stop();
+  //     break;
+  //   case MOVING_UP:
+  //     move_up();
+  //     break;
+  //   case MOVING_DOWN:
+  //     move_down();
+  //     break;
+  // }
 }
 
 /**
