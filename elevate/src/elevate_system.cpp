@@ -8,7 +8,7 @@
  */
 #include "elevate_system.h"
 #include "elevate_constants.h"
-#include <arduino.h>
+#include <Arduino.h>
 
 float const ElevateSystem::ROTATIONS_PER_MS = ROTATIONS_PER_MS_;
 
@@ -57,22 +57,20 @@ void ElevateSystem::update() {
  * Control the system based on its state
  */
 void ElevateSystem::control() {
-  move_up();
-  // switch (state) {
-  //   case STOPPED:
-  //     hard_stop();
-  //     break;
-  //   case STOPPING:
-  //     hard_stop();
-  //     // smooth_stop();
-  //     break;
-  //   case MOVING_UP:
-  //     move_up();
-  //     break;
-  //   case MOVING_DOWN:
-  //     move_down();
-  //     break;
-  // }
+  switch (state) {
+    case STOPPED:
+      hard_stop();
+      break;
+    case STOPPING:
+      smooth_stop();
+      break;
+    case MOVING_UP:
+      move_up();
+      break;
+    case MOVING_DOWN:
+      move_down();
+      break;
+  }
 }
 
 /**
@@ -203,7 +201,6 @@ void ElevateSystem::move_up() {
   unsigned long current_time = micros();
   height += UNITS_PER_ROTATION * ROTATIONS_PER_MS * (current_time - previous_move_time) * 1e-3;
   previous_move_time = current_time;
-  // height = 1.00;
   move();
 }
 
@@ -214,6 +211,5 @@ void ElevateSystem::move_down() {
   unsigned long current_time = micros();
   height -= UNITS_PER_ROTATION * ROTATIONS_PER_MS * (current_time - previous_move_time) * 1e-3;
   previous_move_time = current_time;
-  // height = -1.00;
   move();
 }

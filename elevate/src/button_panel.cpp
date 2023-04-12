@@ -9,7 +9,7 @@
 #include "button_panel.h"
 #include "elevate_constants.h"
 #include "switch_utility.h"
-#include <arduino.h>
+#include <Arduino.h>
 
 /**
  * Button Panel constructor

@@ -7,7 +7,7 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "pid_controller.h"
-#include <arduino.h>
+#include <Arduino.h>
 
 /**
  * PID Controller constructor

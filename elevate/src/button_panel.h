@@ -9,7 +9,7 @@
 #ifndef BUTTON_PANEL_H_
 #define BUTTON_PANEL_H_
 
-#include <arduino.h>
+#include <stdint.h>
 
 class ButtonPanel {
   public:

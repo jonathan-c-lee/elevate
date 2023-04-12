@@ -36,11 +36,12 @@ void setup() {
   WiFi.mode(WIFI_STA);
   if (esp_now_init() != ESP_OK) return;
   if (esp_now_add_peer(&master) != ESP_OK) return;
+
   message.id = 0;
 }
 
 void loop() {
   message.angle = encoder.get_raw_angle();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
-  delay(20);
+  delay(15);
 }

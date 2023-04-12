@@ -9,7 +9,7 @@
 #ifndef SWITCH_UTILITY_H_
 #define SWITCH_UTILITY_H_
 
-#include <arduino.h>
+#include <stdint.h>
 
 bool switch_pressed(
     uint8_t switch_pin,

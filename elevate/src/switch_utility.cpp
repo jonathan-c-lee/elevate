@@ -7,7 +7,7 @@
  * Contact: jonlee27@seas.upenn.edu
  */
 #include "switch_utility.h"
-#include <arduino.h>
+#include <Arduino.h>
 
 /**
  * Determine if a switch is pressed
