@@ -12,8 +12,8 @@
 #include <stdint.h>
 
 // Pin constants
-#define UPPER_LIMIT_SWITCH_PIN_0 15
-#define LOWER_LIMIT_SWITCH_PIN_0 14
+#define UPPER_LIMIT_SWITCH_PIN_0 1
+#define LOWER_LIMIT_SWITCH_PIN_0 0
 
 // Encoder constants
 int const SDA_PIN = 18;

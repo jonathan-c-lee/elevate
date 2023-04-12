@@ -23,7 +23,7 @@ UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
 LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin) {
   is_setup = false;
   height = 0;
-  previous_angle = encoder.get_raw_angle();
+  previous_angle = 0;
 }
 
 /**

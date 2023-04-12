@@ -38,7 +38,9 @@ ElevateMinion minion = ElevateMinion(UPPER_LIMIT_SWITCH_PIN_0, LOWER_LIMIT_SWITC
 
 void setup() {
   // communication setup
+  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
   if (esp_now_init() != ESP_OK) return;
   if (esp_now_add_peer(&master) != ESP_OK) return;
 
@@ -51,5 +53,5 @@ void loop() {
   message.lower_limit_switch_pressed = minion.lower_limit_switch_pressed();
   message.upper_limit_switch_pressed = minion.upper_limit_switch_pressed();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
-  delay(5);
+  delay(15);
 }

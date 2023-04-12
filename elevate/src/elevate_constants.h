@@ -28,8 +28,8 @@
 #define PWM_CHANNEL_3            0
 #define DIRECTION_PIN_3          5
 
-#define UP_SWITCH_PIN_   42
-#define DOWN_SWITCH_PIN_ 41
+#define UP_SWITCH_PIN_   41
+#define DOWN_SWITCH_PIN_ 42
 
 // Switch constants
 unsigned long const USER_INPUT_DELAY_MS = 50;
@@ -43,7 +43,7 @@ float const KD_ = 0.2;
 unsigned long const PID_RATE_MS_ = 50;
 int const MINIMUM_OUTPUT_ = -(1 << MOTOR_RESOLUTION_BITS_) + 1;
 int const MAXIMUM_OUTPUT_ = (1 << MOTOR_RESOLUTION_BITS_) - 1;
-long const ERROR_THRESHOLD_ = 10;
+long const ERROR_THRESHOLD_ = 20;
 
 // Elevate system constants
 int const UNITS_PER_ROTATION = 1 << 12;

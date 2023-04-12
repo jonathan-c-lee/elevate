@@ -77,6 +77,7 @@ void receive_callback(const uint8_t* mac_address, const uint8_t* data, int len) 
 
 void setup() {
   WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);
   if (esp_now_init() != ESP_OK) return;
   esp_now_register_recv_cb(receive_callback);
   elevate.setup();
