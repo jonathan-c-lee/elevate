@@ -76,6 +76,7 @@ void receive_callback(const uint8_t* mac_address, const uint8_t* data, int len) 
 }
 
 void setup() {
+  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);
   if (esp_now_init() != ESP_OK) return;

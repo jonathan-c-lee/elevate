@@ -26,5 +26,6 @@ uint8_t const STATUS_ADDRESS_ = 0x0b;
 
 int const UNITS_PER_ROTATION = 1 << 12;
 unsigned long const DEBOUNCE_DELAY_MS = 25;
+int const NOISE = 8;
 
 #endif

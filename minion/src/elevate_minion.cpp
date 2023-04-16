@@ -81,6 +81,7 @@ bool ElevateMinion::upper_limit_switch_pressed() const {
  */
 long ElevateMinion::update_height() {
   int current_angle = encoder.get_raw_angle();
+  if (abs(current_angle - previous_angle) < NOISE) return height;
   int increase = (current_angle - previous_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
   int decrease = (previous_angle - current_angle + UNITS_PER_ROTATION) % UNITS_PER_ROTATION;
   if (increase > decrease) {

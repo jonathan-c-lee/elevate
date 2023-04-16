@@ -30,7 +30,7 @@ MinionMessage message;
 // ESP-NOW parameters
 esp_now_peer_info_t const master = {
   .peer_addr = {0xF4, 0x12, 0xFA, 0x42, 0x09, 0x54},
-  .channel = 0,
+  .channel = 1,
   .encrypt = false,
 };
 
@@ -53,5 +53,11 @@ void loop() {
   message.lower_limit_switch_pressed = minion.lower_limit_switch_pressed();
   message.upper_limit_switch_pressed = minion.upper_limit_switch_pressed();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
+  Serial.print("Height: ");
+  Serial.println(message.height);
+  Serial.print("LLS: ");
+  Serial.println(message.lower_limit_switch_pressed);
+  Serial.print("ULS: ");
+  Serial.println(message.upper_limit_switch_pressed);
   delay(15);
 }
