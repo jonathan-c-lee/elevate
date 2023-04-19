@@ -27,12 +27,14 @@ enum ElevateStatus {
 /**
  * Elevate State
  * 
+ * CALIBRATE:   calibrate mode
  * STOPPED:     no movement
  * STOPPING:    preparing to stop
  * MOVING_UP:   moving upwards
  * MOVING_DOWN: moving downwards
  */
 enum ElevateState {
+  CALIBRATE,
   STOPPED,
   STOPPING,
   MOVING_UP,

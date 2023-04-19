@@ -24,6 +24,7 @@ class ElevateModule {
     void smooth_stop(long height);
     void move(long height);
     void update(long height, bool lower_limit_switch_pressed, bool upper_limit_switch_pressed);
+    void update_offset();
 
   private:
     static uint32_t const MOTOR_FREQUENCY;
@@ -43,6 +44,7 @@ class ElevateModule {
     ElevateStatus status;
     PIDController pid_controller;
     long height;
+    long height_offset;
     bool lower_limit_switch_pressed;
     bool upper_limit_switch_pressed;
 

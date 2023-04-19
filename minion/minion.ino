@@ -45,7 +45,7 @@ void setup() {
   if (esp_now_add_peer(&master) != ESP_OK) return;
 
   minion.setup();
-  message.id = 0;
+  message.id = 3;
 }
 
 void loop() {

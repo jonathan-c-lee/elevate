@@ -58,11 +58,15 @@ void ElevateSystem::update() {
  */
 void ElevateSystem::control() {
   switch (state) {
+    case CALIBRATE:
+      calibrate();
+      break;
     case STOPPED:
       hard_stop();
       break;
     case STOPPING:
-      smooth_stop();
+      //smooth_stop();
+      hard_stop();
       break;
     case MOVING_UP:
       move_up();
@@ -114,6 +118,10 @@ void ElevateSystem::set_state(ElevateState state) {
   ElevateState current_state = this->state;
   ElevateStatus current_status = get_status();
   switch (state) {
+    case CALIBRATE:
+      this->state = state;
+      if (current_state != CALIBRATE) previous_move_time = micros();
+      break;
     case STOPPED:
       this->state = state;
       break;
@@ -153,13 +161,41 @@ void ElevateSystem::update_module_status() {
  */
 void ElevateSystem::update_system_state() {
   if (BUTTON_PANEL->up_switch_pressed() && BUTTON_PANEL->down_switch_pressed()) {
-    set_state(STOPPING);
+    //Serial.println("calibrate");
+    set_state(CALIBRATE);
   } else if (BUTTON_PANEL->up_switch_pressed()) {
+    //Serial.println("up");
     set_state(MOVING_UP);
   } else if (BUTTON_PANEL->down_switch_pressed()) {
+    //Serial.println("down");
     set_state(MOVING_DOWN);
   } else {
+    //Serial.println("stahp");
     set_state(STOPPING);
+  }
+}
+
+/**
+ * Calibrate the system
+ */
+void ElevateSystem::calibrate() {
+  bool is_level = true;
+  for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+    if (MODULES[i].get_status() == LOWER_LIMITED) {
+      MODULES[i].hard_stop();
+      MODULES[i].update_offset();
+    } else {
+      is_level = false;
+      unsigned long current_time = micros();
+      height -= UNITS_PER_ROTATION * ROTATIONS_PER_MS * (current_time - previous_move_time) * 1e-3;
+      previous_move_time = current_time;
+      MODULES[i].move((long) height);
+    }
+  }
+
+  if (is_level) {
+    height = 0.0;
+    set_state(STOPPED);
   }
 }
 
@@ -189,6 +225,8 @@ void ElevateSystem::smooth_stop() {
  * Command the system to move
  */
 void ElevateSystem::move() {
+  Serial.println("Height: ");
+  Serial.println(height);
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
     MODULES[i].move((long) height);
   }

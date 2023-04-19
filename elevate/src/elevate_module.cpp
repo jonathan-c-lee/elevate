@@ -37,6 +37,7 @@ pid_controller(KP, KI, KD, PID_RATE_MS, MINIMUM_OUTPUT, MAXIMUM_OUTPUT) {
   state = STOPPED;
   status = FINE;
   height = 0;
+  height_offset = 0;
   lower_limit_switch_pressed = false;
   upper_limit_switch_pressed = false;
 }
@@ -91,6 +92,7 @@ void ElevateModule::update_status() {
 void ElevateModule::hard_stop() {
   pid_controller.set_mode(OFF);
   set_speed(0);
+  delay(PID_RATE_MS_);
 }
 
 /**
@@ -99,7 +101,8 @@ void ElevateModule::hard_stop() {
  * @param height height to stop at
  */
 void ElevateModule::smooth_stop(long height) {
-  if (state == STOPPED) return;
+  // if (state == STOPPED) return;
+  if (state == STOPPED) hard_stop();
   if (abs(this->height - height) < ERROR_THRESHOLD) {
     hard_stop();
   } else {
@@ -115,7 +118,9 @@ void ElevateModule::smooth_stop(long height) {
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
-  set_speed(pid_controller.control(height, this->height));
+  Serial.println("Actual: ");
+  Serial.println(this->height - this->height_offset);
+  set_speed(pid_controller.control(height, this->height - this->height_offset));
 }
 
 /**
@@ -130,6 +135,13 @@ void ElevateModule::update(
   this->height = height;
   this->lower_limit_switch_pressed = lower_limit_switch_pressed;
   this->upper_limit_switch_pressed = upper_limit_switch_pressed;
+}
+
+/**
+ * Update the height offset
+ */
+void ElevateModule::update_offset() {
+  height_offset = height;
 }
 
 /**

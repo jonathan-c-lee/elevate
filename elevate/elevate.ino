@@ -34,29 +34,29 @@ ElevateModule module_0 = ElevateModule(
   PWM_CHANNEL_0,
   DIRECTION_PIN_0
 );
-// ElevateModule module_1 = ElevateModule(
-//   PWM_PIN_1,
-//   PWM_CHANNEL_1,
-//   DIRECTION_PIN_1
-// );
-// ElevateModule module_2 = ElevateModule(
-//   PWM_PIN_2,
-//   PWM_CHANNEL_2,
-//   DIRECTION_PIN_2
-// );
-// ElevateModule module_3 = ElevateModule(
-//   PWM_PIN_3,
-//   PWM_CHANNEL_3,
-//   DIRECTION_PIN_3
-// );
+ElevateModule module_1 = ElevateModule(
+  PWM_PIN_1,
+  PWM_CHANNEL_1,
+  DIRECTION_PIN_1
+);
+ElevateModule module_2 = ElevateModule(
+  PWM_PIN_2,
+  PWM_CHANNEL_2,
+  DIRECTION_PIN_2
+);
+ElevateModule module_3 = ElevateModule(
+  PWM_PIN_3,
+  PWM_CHANNEL_3,
+  DIRECTION_PIN_3
+);
 
-int const NUMBER_OF_MODULES = 1;
+int const NUMBER_OF_MODULES = 4;
 
 ElevateModule modules[NUMBER_OF_MODULES] = {
-  module_0
-  // module_1,
-  // module_2,
-  // module_3
+  module_0,
+  module_1,
+  module_2,
+  module_3
 };
 
 ButtonPanel button_panel = ButtonPanel(UP_SWITCH_PIN_, DOWN_SWITCH_PIN_);
@@ -87,4 +87,31 @@ void setup() {
 void loop() {
   elevate.update();
   elevate.control();
+  // elevate.set_state(STOPPED);
+  // delay(10000);
+  // unsigned long start = millis();
+  // while ((millis() - start) < 10000) {
+  //   elevate.set_state(MOVING_UP);
+  //   elevate.move_up();
+  // }
+  // start = millis();
+  // while ((millis() - start) < 5000) {
+  //   elevate.set_state(STOPPING);
+  //   elevate.smooth_stop();
+  // }
+  // start = millis();
+  // while ((millis() - start) < 10000) {
+  //   elevate.set_state(MOVING_DOWN);
+  //   elevate.move_down();
+  // }
+  // start = millis();
+  // while ((millis() - start) < 5000) {
+  //   elevate.set_state(STOPPING);
+  //   elevate.smooth_stop();
+  // }
+  // elevate.hard_stop();
+  // elevate.set_state(STOPPED);
+  // while (true) {
+  //   delay(1000);
+  // }
 }
