@@ -65,8 +65,7 @@ void ElevateSystem::control() {
       hard_stop();
       break;
     case STOPPING:
-      //smooth_stop();
-      hard_stop();
+      smooth_stop();
       break;
     case MOVING_UP:
       move_up();

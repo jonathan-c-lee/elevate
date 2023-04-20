@@ -63,16 +63,20 @@ ButtonPanel button_panel = ButtonPanel(UP_SWITCH_PIN_, DOWN_SWITCH_PIN_);
 
 ElevateSystem elevate = ElevateSystem(modules, NUMBER_OF_MODULES, &button_panel);
 
+portMUX_TYPE mux = portMUX_INITIALIZER_UNLOCKED;
+
 /**
  * Callback when data is received from minion
  */
 void receive_callback(const uint8_t* mac_address, const uint8_t* data, int len) {
+  portENTER_CRITICAL_ISR(&mux);
   memcpy(&message, data, sizeof(message));
   modules[message.id].update(
     message.height,
     message.lower_limit_switch_pressed,
     message.upper_limit_switch_pressed
   );
+  portEXIT_CRITICAL_ISR(&mux);
 }
 
 void setup() {

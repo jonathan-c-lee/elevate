@@ -43,10 +43,10 @@ class ElevateModule {
     ElevateState state;
     ElevateStatus status;
     PIDController pid_controller;
-    long height;
+    volatile long height;
     long height_offset;
-    bool lower_limit_switch_pressed;
-    bool upper_limit_switch_pressed;
+    volatile bool lower_limit_switch_pressed;
+    volatile bool upper_limit_switch_pressed;
 
     void pwm_setup(uint8_t channel, uint8_t pin) const;
     void set_speed(int speed);

@@ -45,7 +45,7 @@ void setup() {
   if (esp_now_add_peer(&master) != ESP_OK) return;
 
   minion.setup();
-  message.id = 3;
+  message.id = 2;
 }
 
 void loop() {
@@ -53,6 +53,8 @@ void loop() {
   message.lower_limit_switch_pressed = minion.lower_limit_switch_pressed();
   message.upper_limit_switch_pressed = minion.upper_limit_switch_pressed();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
+  Serial.print("ID: ");
+  Serial.println(message.id);
   Serial.print("Height: ");
   Serial.println(message.height);
   Serial.print("LLS: ");

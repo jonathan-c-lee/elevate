@@ -92,7 +92,7 @@ void ElevateModule::update_status() {
 void ElevateModule::hard_stop() {
   pid_controller.set_mode(OFF);
   set_speed(0);
-  delay(PID_RATE_MS_);
+  state = STOPPED;
 }
 
 /**
@@ -101,13 +101,22 @@ void ElevateModule::hard_stop() {
  * @param height height to stop at
  */
 void ElevateModule::smooth_stop(long height) {
-  // if (state == STOPPED) return;
-  if (state == STOPPED) hard_stop();
-  if (abs(this->height - height) < ERROR_THRESHOLD) {
+  static unsigned long start_time = millis();
+  if (state != STOPPING) {
+    start_time = millis();
+  }
+
+  if (state == STOPPED) {
+    hard_stop();
+  } else if (abs(height - (this->height - this->height_offset)) < ERROR_THRESHOLD) {
     hard_stop();
   } else {
-    pid_controller.set_mode(ON);
-    set_speed(pid_controller.control(height, this->height));
+    if (millis() - start_time < 5000) {
+      state = STOPPING;
+      move(height);
+    } else {
+      hard_stop();
+    }
   }
 }
 
@@ -126,12 +135,46 @@ void ElevateModule::move(long height) {
 /**
  * Update module readings
  * 
- * :param current_angle: the current angle reading
+ * @param height                     new module height from encoder MCU
+ * @param lower_limit_switch_pressed whether or not lower limit switch is pressed
+ * @param upper_limit_switch_pressed whether or not upper limit switch is pressed
  */
 void ElevateModule::update(
     long height,
     bool lower_limit_switch_pressed,
     bool upper_limit_switch_pressed) {
+  static unsigned long previous_time = millis();
+  unsigned long time_elapsed = millis() - previous_time;
+  long height_difference = height - this->height;
+
+  switch (state) {
+    case STOPPED:
+      previous_time = millis();
+      break;
+    case STOPPING:
+      previous_time = millis();
+      break;
+    case CALIBRATE:
+      previous_time = millis();
+      break;
+    case MOVING_DOWN:
+      if (time_elapsed > 1000) {
+        if (height_difference > -(UNITS_PER_ROTATION / 2)) {
+          this->height_offset += (time_elapsed / 1000) * UNITS_PER_ROTATION;
+        }
+      }
+      previous_time = millis();
+      break;
+    case MOVING_UP:
+      if (millis() - previous_time > 1000) {
+        if (height_difference < (UNITS_PER_ROTATION / 2)) {
+          this->height_offset -= (time_elapsed / 1000) * UNITS_PER_ROTATION;
+        }
+      }
+      previous_time = millis();
+      break;
+  }
+
   this->height = height;
   this->lower_limit_switch_pressed = lower_limit_switch_pressed;
   this->upper_limit_switch_pressed = upper_limit_switch_pressed;
