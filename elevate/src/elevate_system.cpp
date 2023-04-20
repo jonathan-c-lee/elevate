@@ -65,7 +65,8 @@ void ElevateSystem::control() {
       hard_stop();
       break;
     case STOPPING:
-      smooth_stop();
+      hard_stop();
+      //smooth_stop();
       break;
     case MOVING_UP:
       move_up();
@@ -125,7 +126,7 @@ void ElevateSystem::set_state(ElevateState state) {
       this->state = state;
       break;
     case STOPPING:
-      this->state = (this->state == STOPPED) ? STOPPED : STOPPING;
+      this->state = (current_state == STOPPED) ? STOPPED : STOPPING;
       break;
     case MOVING_UP:
       if (current_status == MALFUNCTION || current_status == UPPER_LIMITED) {
@@ -160,16 +161,12 @@ void ElevateSystem::update_module_status() {
  */
 void ElevateSystem::update_system_state() {
   if (BUTTON_PANEL->up_switch_pressed() && BUTTON_PANEL->down_switch_pressed()) {
-    //Serial.println("calibrate");
     set_state(CALIBRATE);
   } else if (BUTTON_PANEL->up_switch_pressed()) {
-    //Serial.println("up");
     set_state(MOVING_UP);
   } else if (BUTTON_PANEL->down_switch_pressed()) {
-    //Serial.println("down");
     set_state(MOVING_DOWN);
   } else {
-    //Serial.println("stahp");
     set_state(STOPPING);
   }
 }
@@ -224,9 +221,9 @@ void ElevateSystem::smooth_stop() {
  * Command the system to move
  */
 void ElevateSystem::move() {
-  Serial.println("Height: ");
-  Serial.println(height);
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
+    Serial.print("ID: ");
+    Serial.println(i);
     MODULES[i].move((long) height);
   }
 }

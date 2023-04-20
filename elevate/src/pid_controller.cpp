@@ -60,6 +60,10 @@ void PIDController::set_mode(Mode mode) {
  * @return output of PID controller
  */
 int PIDController::control(long setpoint, long input) {
+  Serial.print("Error: ");
+    Serial.println(setpoint - input);
+    Serial.print("Output: ");
+    Serial.println(previous_output);
   if (mode == OFF) return previous_output;
 
   unsigned long current_time = millis();
@@ -83,7 +87,6 @@ int PIDController::control(long setpoint, long input) {
     previous_time = current_time;
     previous_input = input;
     previous_output = output;
-    
     return output;
   }
   

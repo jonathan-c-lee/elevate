@@ -38,14 +38,13 @@ ElevateMinion minion = ElevateMinion(UPPER_LIMIT_SWITCH_PIN_0, LOWER_LIMIT_SWITC
 
 void setup() {
   // communication setup
-  Serial.begin(115200);
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);
   if (esp_now_init() != ESP_OK) return;
   if (esp_now_add_peer(&master) != ESP_OK) return;
 
   minion.setup();
-  message.id = 2;
+  message.id = 0;
 }
 
 void loop() {
@@ -53,13 +52,5 @@ void loop() {
   message.lower_limit_switch_pressed = minion.lower_limit_switch_pressed();
   message.upper_limit_switch_pressed = minion.upper_limit_switch_pressed();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
-  Serial.print("ID: ");
-  Serial.println(message.id);
-  Serial.print("Height: ");
-  Serial.println(message.height);
-  Serial.print("LLS: ");
-  Serial.println(message.lower_limit_switch_pressed);
-  Serial.print("ULS: ");
-  Serial.println(message.upper_limit_switch_pressed);
   delay(15);
 }

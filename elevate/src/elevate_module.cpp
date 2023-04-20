@@ -127,8 +127,10 @@ void ElevateModule::smooth_stop(long height) {
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
-  Serial.println("Actual: ");
-  Serial.println(this->height - this->height_offset);
+  // Serial.print("Desired: ");
+  // Serial.println(height);
+  // Serial.println("Actual: ");
+  // Serial.println(this->height - this->height_offset);
   set_speed(pid_controller.control(height, this->height - this->height_offset));
 }
 
