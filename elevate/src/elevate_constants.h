@@ -12,11 +12,11 @@
 #include <stdint.h>
 
 // Pin constants
-#define PWM_PIN_0       16
+#define PWM_PIN_0       15
 #define PWM_CHANNEL_0   0
 #define DIRECTION_PIN_0 13
 
-#define PWM_PIN_1       15
+#define PWM_PIN_1       14
 #define PWM_CHANNEL_1   1
 #define DIRECTION_PIN_1 12
 
@@ -43,7 +43,7 @@ float const KD_ = 0.15;
 unsigned long const PID_RATE_MS_ = 50;
 int const MINIMUM_OUTPUT_ = -(1 << MOTOR_RESOLUTION_BITS_) + 1;
 int const MAXIMUM_OUTPUT_ = (1 << MOTOR_RESOLUTION_BITS_) - 1;
-long const ERROR_THRESHOLD_ = 5;
+long const ERROR_THRESHOLD_ = 200;
 
 // Elevate system constants
 int const UNITS_PER_ROTATION = 1 << 12;
