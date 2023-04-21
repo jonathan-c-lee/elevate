@@ -129,8 +129,8 @@ void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
   // Serial.print("Desired: ");
   // Serial.println(height);
-  // Serial.println("Actual: ");
-  // Serial.println(this->height - this->height_offset);
+  Serial.print(", Actual: ");
+  Serial.println(this->height - this->height_offset);
   set_speed(pid_controller.control(height, this->height - this->height_offset));
 }
 
@@ -211,12 +211,22 @@ void ElevateModule::set_speed(int speed) {
     ledcWrite(PWM_CHANNEL, 0);
     state = STOPPED;
   } else if (speed > 0) {
-    digitalWrite(DIRECTION_PIN, HIGH);
-    ledcWrite(PWM_CHANNEL, speed);
-    state = MOVING_UP;
+    if (status == UPPER_LIMITED) {
+      ledcWrite(PWM_CHANNEL, 0);
+      state = STOPPED;
+    } else {
+      digitalWrite(DIRECTION_PIN, HIGH);
+      ledcWrite(PWM_CHANNEL, speed);
+      state = MOVING_UP;
+    }
   } else {
-    digitalWrite(DIRECTION_PIN, LOW);
-    ledcWrite(PWM_CHANNEL, -speed);
-    state = MOVING_DOWN;
+    if (status == LOWER_LIMITED) {
+      ledcWrite(PWM_CHANNEL, 0);
+      state = STOPPED;
+    } else {
+      digitalWrite(DIRECTION_PIN, LOW);
+      ledcWrite(PWM_CHANNEL, -speed);
+      state = MOVING_DOWN;
+    }
   }
 }

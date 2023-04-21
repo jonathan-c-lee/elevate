@@ -34,7 +34,8 @@ esp_now_peer_info_t const master = {
   .encrypt = false,
 };
 
-ElevateMinion minion = ElevateMinion(UPPER_LIMIT_SWITCH_PIN_0, LOWER_LIMIT_SWITCH_PIN_0);
+ElevateMinion minion = ElevateMinion(LOWER_LIMIT_SWITCH_PIN_0, UPPER_LIMIT_SWITCH_PIN_0);
+unsigned long start;
 
 void setup() {
   // communication setup
@@ -52,5 +53,5 @@ void loop() {
   message.lower_limit_switch_pressed = minion.lower_limit_switch_pressed();
   message.upper_limit_switch_pressed = minion.upper_limit_switch_pressed();
   esp_now_send(master.peer_addr, (uint8_t *) &message, sizeof(message));
-  delay(15);
+  delay(20);
 }

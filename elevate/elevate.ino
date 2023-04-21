@@ -91,31 +91,4 @@ void setup() {
 void loop() {
   elevate.update();
   elevate.control();
-  // elevate.set_state(STOPPED);
-  // delay(10000);
-  // unsigned long start = millis();
-  // while ((millis() - start) < 10000) {
-  //   elevate.set_state(MOVING_UP);
-  //   elevate.move_up();
-  // }
-  // start = millis();
-  // while ((millis() - start) < 5000) {
-  //   elevate.set_state(STOPPING);
-  //   elevate.smooth_stop();
-  // }
-  // start = millis();
-  // while ((millis() - start) < 10000) {
-  //   elevate.set_state(MOVING_DOWN);
-  //   elevate.move_down();
-  // }
-  // start = millis();
-  // while ((millis() - start) < 5000) {
-  //   elevate.set_state(STOPPING);
-  //   elevate.smooth_stop();
-  // }
-  // elevate.hard_stop();
-  // elevate.set_state(STOPPED);
-  // while (true) {
-  //   delay(1000);
-  // }
 }

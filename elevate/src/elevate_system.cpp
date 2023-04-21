@@ -222,8 +222,12 @@ void ElevateSystem::smooth_stop() {
  */
 void ElevateSystem::move() {
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
-    Serial.print("ID: ");
-    Serial.println(i);
+    if (i == 0) {
+      Serial.print("ID: ");
+      Serial.print(i);
+      Serial.print(", Setpoint: ");
+      Serial.print(height);
+    }
     MODULES[i].move((long) height);
   }
 }

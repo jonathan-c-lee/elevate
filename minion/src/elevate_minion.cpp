@@ -19,8 +19,8 @@
  */
 ElevateMinion::ElevateMinion(uint8_t lower_limit_switch_pin, uint8_t upper_limit_switch_pin) :
 encoder(),
-UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin),
-LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin) {
+LOWER_LIMIT_SWITCH_PIN(lower_limit_switch_pin),
+UPPER_LIMIT_SWITCH_PIN(upper_limit_switch_pin) {
   is_setup = false;
   height = 0;
   previous_angle = 0;

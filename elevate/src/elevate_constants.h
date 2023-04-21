@@ -37,9 +37,9 @@ unsigned long const USER_INPUT_DELAY_MS = 50;
 // Elevate module constants
 uint32_t const MOTOR_FREQUENCY_ = 10000;
 uint8_t const MOTOR_RESOLUTION_BITS_ = 10;
-float const KP_ = 0.1;
-float const KI_ = 0.00;
-float const KD_ = 0.00;
+float const KP_ = 0.150;
+float const KI_ = 0.000;
+float const KD_ = 0.001;
 unsigned long const PID_RATE_MS_ = 50;
 int const MINIMUM_OUTPUT_ = -(1 << MOTOR_RESOLUTION_BITS_) + 1;
 int const MAXIMUM_OUTPUT_ = (1 << MOTOR_RESOLUTION_BITS_) - 1;

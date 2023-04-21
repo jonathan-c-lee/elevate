@@ -19,12 +19,6 @@ class ElevateSystem {
     void setup();
     void update();
     void control();
-    void smooth_stop();
-    void move();
-    void move_up();
-    void move_down();
-    void hard_stop();
-    void set_state(ElevateState state);
 
   private:
     static float const ROTATIONS_PER_MS;
@@ -40,15 +34,15 @@ class ElevateSystem {
 
     ElevateStatus get_status() const;
     bool is_module_status(ElevateStatus status) const;
-    // void set_state(ElevateState state);
+    void set_state(ElevateState state);
     void update_module_status();
     void update_system_state();
     void calibrate();
-    // void hard_stop();
-    // void smooth_stop();
-    // void move();
-    // void move_up();
-    // void move_down();
+    void hard_stop();
+    void smooth_stop();
+    void move();
+    void move_up();
+    void move_down();
 };
 
 #endif
