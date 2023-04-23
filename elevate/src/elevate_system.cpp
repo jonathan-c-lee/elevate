@@ -65,8 +65,7 @@ void ElevateSystem::control() {
       hard_stop();
       break;
     case STOPPING:
-      hard_stop();
-      //smooth_stop();
+      smooth_stop();
       break;
     case MOVING_UP:
       move_up();
@@ -222,12 +221,6 @@ void ElevateSystem::smooth_stop() {
  */
 void ElevateSystem::move() {
   for (int i = 0; i < NUMBER_OF_MODULES; i++) {
-    if (i == 0) {
-      Serial.print("ID: ");
-      Serial.print(i);
-      Serial.print(", Setpoint: ");
-      Serial.print(height);
-    }
     MODULES[i].move((long) height);
   }
 }

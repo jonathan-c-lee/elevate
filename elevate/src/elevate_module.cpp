@@ -101,8 +101,13 @@ void ElevateModule::hard_stop() {
  * @param height height to stop at
  */
 void ElevateModule::smooth_stop(long height) {
+  static bool first_call = true;
   static unsigned long start_time = millis();
-  if (state != STOPPING) {
+  if (millis() - start_time > 1.05 * STOP_SETTLE_TIME) {
+    first_call = true;
+  }
+  if (first_call) {
+    first_call = false;
     start_time = millis();
   }
 
@@ -111,7 +116,7 @@ void ElevateModule::smooth_stop(long height) {
   } else if (abs(height - (this->height - this->height_offset)) < ERROR_THRESHOLD) {
     hard_stop();
   } else {
-    if (millis() - start_time < 5000) {
+    if (millis() - start_time < STOP_SETTLE_TIME) {
       state = STOPPING;
       move(height);
     } else {
@@ -127,10 +132,6 @@ void ElevateModule::smooth_stop(long height) {
  */
 void ElevateModule::move(long height) {
   pid_controller.set_mode(ON);
-  // Serial.print("Desired: ");
-  // Serial.println(height);
-  Serial.print(", Actual: ");
-  Serial.println(this->height - this->height_offset);
   set_speed(pid_controller.control(height, this->height - this->height_offset));
 }
 
@@ -168,7 +169,7 @@ void ElevateModule::update(
       previous_time = millis();
       break;
     case MOVING_UP:
-      if (millis() - previous_time > 1000) {
+      if (time_elapsed > 1000) {
         if (height_difference < (UNITS_PER_ROTATION / 2)) {
           this->height_offset -= (time_elapsed / 1000) * UNITS_PER_ROTATION;
         }

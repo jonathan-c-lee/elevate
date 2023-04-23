@@ -1,11 +1,11 @@
-// /**
-//  * @file minion.ino
-//  * 
-//  * @brief main code for elevate encoder minion
-//  * 
-//  * @author Jonathan Lee
-//  * Contact: jonlee27@seas.upenn.edu
-//  */
+/**
+ * @file minion.ino
+ * 
+ * @brief main code for elevate encoder minion
+ * 
+ * @author Jonathan Lee
+ * Contact: jonlee27@seas.upenn.edu
+ */
 #include <WiFi.h>
 #include <esp_now.h>
 #include "src/minion_constants.h"
@@ -45,7 +45,7 @@ void setup() {
   if (esp_now_add_peer(&master) != ESP_OK) return;
 
   minion.setup();
-  message.id = 0;
+  message.id = 3;
 }
 
 void loop() {
