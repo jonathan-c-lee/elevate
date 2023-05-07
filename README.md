@@ -1,1 +1,1 @@
-# Senior-Design
+![ELEVATE](media/poster/ELEVATE%20Design%20Poster.png)

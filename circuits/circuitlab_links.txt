@@ -1,4 +1,0 @@
-Main Circuit: https://www.circuitlab.com/circuit/663y6ck6a353/elevate-general-circuit/
-Module Circuit: https://www.circuitlab.com/circuit/pz353z9gn9y4/elevate-module/
-Button Panel Circuit: https://www.circuitlab.com/circuit/48nuf679w27b/elevate-button-panel/
-Power Circuit: https://www.circuitlab.com/circuit/bj2g7atv4qzx/power-circuit/
