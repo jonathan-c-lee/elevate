@@ -35,7 +35,6 @@ esp_now_peer_info_t const master = {
 };
 
 ElevateMinion minion = ElevateMinion(LOWER_LIMIT_SWITCH_PIN_0, UPPER_LIMIT_SWITCH_PIN_0);
-unsigned long start;
 
 void setup() {
   // communication setup
